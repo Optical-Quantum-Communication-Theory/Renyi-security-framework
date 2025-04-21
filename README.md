@@ -1,6 +1,6 @@
-# Paper release Template (Replace with the title of the paper.)
+# Rényi security framework against coherent attacks applied to decoy-state QKD
 
-This is a public version of the code used in *\<paper with link\>* \[\<arXiv link\>\]. This was built for v\<x.y.z with link\> of the Open QKD Security package.
+This is a public version of the code used in *Rényi security framework against coherent attacks applied to decoy-state QKD* \[[arXiv](https://arxiv.org/abs/2504.12248)\]. This was built for v\<x.y.z with link\> of the Open QKD Security package.
 
 \<Write description of code here. For example, what figures and data it generates, and the methods it uses.\>
 
@@ -19,7 +19,7 @@ This is a public version of the code used in *\<paper with link\>* \[\<arXiv lin
 ### with git
 1. Clone this repository and its exact submodules navigate to your desired directory and run,
 ```
-git clone --recurse-submodules https://github.com/Optical-Quantum-Communication-Theory/NAME_OF_REPO
+git clone --recurse-submodules https://github.com/Optical-Quantum-Communication-Theory/Renyi-security-framework
 ```
 2. Follow all further [installation instructions](LINK TO COMMIT).
 3. Also follow the additional Mosek install instructions if you want an exact match.
