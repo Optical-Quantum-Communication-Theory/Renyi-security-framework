@@ -1,0 +1,356 @@
+function [relEntLowerBound,modParser] = renyiFrankWolfeSolver(params,options,debugInfo)
+% FW2StepSolver A 2 step solver to calculate the minimum relative entropy
+% between the key and Eve, given a set of linear equality and inequality
+% constraints on Alice and Bob's density matrix. Step 1 uses the Frank
+% Wolfe algorithm to find the minimum by iteratively solving linearizations
+% of the problem. Step 2 of the solver uses the linearization at solution
+% of step 1 (the final iteration) and solves the dual at this point. While
+% also taking into account for constraint violations, due to numerical
+% imprecission, step 2 produces a valid lower bound on the relative
+% entropy. See "Reliable numerical key rates for quantum key distribution",
+% https://quantum-journal.org/papers/q-2018-07-26-77/, for more details.
+%
+% Input parameters:
+% * krausOps: A cell array of matrices. The cell array contains the Kraus
+%   operators that form the G map on Alice and Bob's joint system. These
+%   should form a completely positive trace non-increasing linear map. Each
+%   Kraus operator must be the same size.
+% * keyProj: A cell array of projection operators that extract the key from
+%   G(\rho). These projection operators should sum to <= identity.
+% * equalityConstraints (EqualityConstraint.empty(0,1)): Array of class 
+%   EqualityConstraint. Represents constraints of the form Tr[operator*rho]
+%   = scalar. Up to the linearConstraintTolerance.
+% * inequalityConstraints (InequalityConstraint.empty(0,1)): Same idea as
+%   the equalityConstraints but uses the class InequalityConstraint.
+%   Represents constraints of the form lowerBound <= Tr[operator*rho] <=
+%   upperBound.
+% * vectorOneNormConstraints (VectorOneNormConstraint.empty(0,1)): Array of
+%   class VectorOneNormConstraint. Represents constraints of the form
+%   ||sum_i Tr[operators_i rho] e_i - vector||_1 <= scalar which are often
+%   used in the finite-size analysis.
+% * matrixOneNormConstraints (MatrixOneNormConstraint.empty(0,1)): Array of
+%   class MatrixOneNormConstraints. Represents constraints of the form
+%   ||Phi(rho) - operator||_1 <= scalar, where Phi is a hermitian
+%   preserving superoperator and operator is a hermitian operator and the
+%   norm is the trace norm.
+% * blockDimsA: If the blockDiagonal option is true, this is a list that
+%   holds the numbers of dimensions of each block of Alice's system.
+% * blockDimsB: If the blockDiagonal option is true, this a list that holds
+%   the numbers of dimensions of each block of Bob's system. For example,
+%   if Bob is a qubit with an additional loss dimension, blockDimsB = [2,1]
+% * rhoA (nan): The density matrix of Alice, if known to be unchanged (for
+%   example, in the source replacement scheme of prepare-and-measure
+%   schemes). Optional, as entanglement based protocols do not use rhoA,
+%   but including rhoA when possible can significantly improve key rate.
+%   This produces a set of equality constraints based on the information
+%   from rhoA. If your proof technique has a more nuanced relation, then
+%   you may have to remove this and add it by hand to your other
+%   constraints.
+% Output:
+% * relEntLowerBound: The lower bound on the relative entropy between the
+%   key and Eve, given the constraints.
+% Options:
+% * cvxSolver (global option): See makeGlobalOptionsParser for details.
+% * cvxPrecision (global option): See makeGlobalOptionsParser for details.
+% * verboseLevel (global option): See makeGlobalOptionsParser for details.
+% * maxIter (20): maximum number of Frank Wolfe iteration steps taken to
+%   minimize the relative entropy.
+% * maxGap (1e-6): Exit condition for the Frank Wolfe algithm. When the
+%   relative gap between the current and previous iteration is small
+%   enough, the Frank wolfe algorithm exits and returns the current point.
+%   The gap must be a postive scalar.
+% * linearSearchPrecision (1e-20): Precision the fminbnd tries to achieve
+%   when searching along the line between the current point and the points
+%   along the gradient line. See fminbnd and optimset for more details.
+% * linearSearchMinStep (1e-3): Minimum step size fminbnd must take
+%   during the Frank Wolf algorithm. Initially, this can help with faster
+%   convergence, but can also just prevent convergence. See fminbnd for
+%   more details (the second argument, x1, in the function). This is only
+%   used for the "vanilla" Frank Wolfe method.
+% * tolVert (1e-12): Tolerance for determining if two steps in the pairwise
+%   Frank Wolfe agorithm should be concidered equal. Must be a positive
+%   scalar. This is only used for the "pairwise" Frank Wolfe method.
+% * linearConstraintTolerance (1e-10): constraint tolerance on the
+%   equalityConstraints, inequalityConstraints, vectorOneNormConstraints
+%   and matrixOneNormConstraints. A bit broader than the name suggests.
+% * frankWolfeMethod ("vanilla"): Choice between using the vanilla or
+%   pairwise Frank Wolfe Algorithms. Select "vanilla" or "pairwise"
+%   respectively.
+% * initMethod (1): Integer selected from {1,2,3}. For the Frank Wolfe
+%   algorithm, the initial point must satisfy the constraints. This selects
+%   which technique is used, from 3 choices:
+%    #1 Closest point in the set to the maximally mixed state.
+%    #2 Point in the set with the largest minimum eigenvalue.
+%    #3 No objective function, just let CVX find a feasible point.
+% * blockDiagonal (false): Tells the solver whether to set up rhoAB to be
+%   block diagonal. If true, the solver also requires two parameters
+%   blockDimsA and blockDimsB, which tell the solver what the block
+%   dimensions of A and B are respectively.
+
+% DebugInfo:
+% * relEntStep1: Value of the relative entropy achieved during the
+%   Frank-Wolfe aproximate minimization. It can help with determining if
+%   Frank-Wolfe could not converge, or just barely converges.
+% * relEntStep2Linearization: The relative entropy at the start of the
+%   linearization routine used for step 2. The initial point may be
+%   perturbed slightly from step 1.
+% * relEntLowerBound: Lower bound on the relative entropy from step 2 of
+%   the solver. The lower bound returned by the solver takes the maximum
+%   between this and 0.
+% * closestDensityMatrixStatus: String containing the status of the CVX
+%   solver after attempting to solve for the closest density matrix in step
+%   1 of the solver.
+% * subproblemStatus: Array of strings containing the status of the CVX
+%   solver as it find the direction to move along for iterations of step 1.
+% * submaxproblemStatus: CVX status for the solver when calculating the
+%   dual solution (a maximization) used in step 2's linearization.
+% * dualSolution: Optimal value achieved from the subMaxProblem mentioned
+%   above.
+%
+% See also: QKDMathSolverModule, makeGlobalOptionsParser, fminbnd, optimset
+arguments
+    params (1,1) struct
+    options (1,1) struct
+    debugInfo (1,1) DebugInfo
+end
+
+%% options
+
+%start with the global parser and add on the extra options
+optionsParser = makeGlobalOptionsParser(mfilename);
+
+optionsParser.addOptionalParam("maxIter",20,@mustBeInteger);
+optionsParser.addAdditionalConstraint(@(x) x>0, "maxIter");
+optionsParser.addOptionalParam("maxGap",1e-6,@(x) x>0);
+optionsParser.addOptionalParam("linearSearchPrecision",1e-20,@(x) x>0);
+optionsParser.addOptionalParam("linearSearchMinStep",0,@(x) 0<=x && x<=1);
+optionsParser.addOptionalParam("tolVert",1e-12,@(x)x>0);
+optionsParser.addOptionalParam("linearConstraintTolerance",1e-10,@(x) x>0);
+optionsParser.addOptionalParam("frankWolfeMethod",  "vanilla",@(x)mustBeMember(x,["vanilla","pairwise"]));
+optionsParser.addOptionalParam("initMethod",1,@(x) mustBeMember(x,[1,2,3]));
+optionsParser.addOptionalParam("blockDiagonal", false, @(x) mustBeMember(x, [true, false]));
+optionsParser.addOptionalParam("numericPerturbation",1e-8,@(x) mustBeInRange(x,0,1))
+optionsParser.addOptionalParam("numericPerturbationAffine",0,@(x) mustBeInRange(x,0,1))
+optionsParser.addOptionalParam("QESMode", false, @(x) mustBeMember(x, [true, false]));
+optionsParser.addOptionalParam("stopNegGap",false,@(x) mustBeMember(x, [true, false]));
+optionsParser.parse(options);
+
+options = optionsParser.Results;
+
+%% module parser
+
+modParser = moduleParser(mfilename);
+
+% kraus operators for G map and key projection operators for Z map
+modParser.addRequiredParam("krausOps",@mustBeNonempty);
+modParser.addAdditionalConstraint(@isCPTNIKrausOps,"krausOps");
+modParser.addRequiredParam("keyProj",@mustBeNonempty);
+modParser.addAdditionalConstraint(@mustBeAKeyProj,"keyProj");
+modParser.addRequiredParam("probTest",@(x) x>=0);
+modParser.addRequiredParam("renyiAlpha",@(x)mustBeInRange(x,1,2,"exclude-lower"));
+modParser.addRequiredParam("dimAPrime",@mustBeInteger);
+modParser.addAdditionalConstraint(@mustBePositive,"dimAPrime");
+
+modParser.addRequiredParam("stateTest",@isDensityOperator);
+modParser.addRequiredParam("stateGen",@isDensityOperator);
+
+
+%same dimension for matrix multiplication
+modParser.addAdditionalConstraint(@(x,y)size(x{1},1) == size(y{1},2),["krausOps","keyProj"])
+
+% Add constraints
+modParser.addRequiredParam("testConstraints",@(x)mustBeA(x,"EqualityConstraint")); % must sum to identity and 1.
+
+% make sure the constraints all act on a rhoAB of the same size.
+modParser.addAdditionalConstraint(@(testConstraints,krausOps)...
+    all([testConstraints.rhoDim] == size(krausOps{1},2),"all"),...
+    ["testConstraints","krausOps"]);
+
+% block diagonal constraints (if enabled)
+if options.blockDiagonal
+    modParser.addRequiredParam("blockDimsAPrime", @isBlockDimsWellFormated);
+    modParser.addRequiredParam("blockDimsB", @isBlockDimsWellFormated);
+
+    % make sure they sum to the total number of dimensions % fix this for
+    % choi matrix
+    % modParser.addAdditionalConstraint(@(blockDimsAPrime,blockDimsB,krausOps)...
+    %     sum(blockDimsAPrime,"all")*sum(blockDimsB,"all") == size(krausOps{1},2),...
+    %     ["blockDimsAPrime","blockDimsB","krausOps"]);
+end
+
+%Apply modParser to input parameters
+modParser.parse(params,"warnUnusedParams",true);
+params = modParser.Results;
+
+% get all the dimensions
+dimAPrime = params.dimAPrime;
+dimA = size(params.stateGen,1)/dimAPrime;
+dimB = size(params.krausOps{1},2)/dimA;
+
+testCons = params.testConstraints;
+probTest = params.probTest;
+
+%version with alphaHat
+% alphaHat = 1/(2-params.renyiAlpha);
+% entropyAlpha = alphaHat;
+
+%version with alpha
+entropyAlpha = params.renyiAlpha;
+
+%% start the solver
+
+%generate maximally mixed state, later used as initial guess for FW iteration
+choi0 = eye(dimAPrime*dimB)/dimB;
+
+% generate block diagonal transformation matrices
+if options.blockDiagonal
+    [options.blockP, options.newDims] = blockRearrange(params.blockDimsAPrime, params.blockDimsB);
+end
+
+% curry the FW functions
+perturbation = options.numericPerturbation;
+perturbationAff = options.numericPerturbationAffine;
+
+func =     @(vecFW) RenyiTildeDownPA.funcFW(vecFW,params.stateGen,params.keyProj,params.krausOps,probTest,entropyAlpha,dimAPrime,perturbation,perturbationAff);
+gradFunc = @(vecFW) RenyiTildeDownPA.gradFuncFW(vecFW,params.stateGen,params.keyProj,params.krausOps,probTest,entropyAlpha,dimAPrime,perturbation,perturbationAff);
+
+subProblemFunc = @(vecFW,vecFWGrad) RenyiTildeDownPA.subproblemUnique(vecFW,vecFWGrad,...
+    params.stateTest,dimAPrime,probTest,testCons,options);
+
+% run step 1 routines
+vecFWInit = RenyiTildeDownPA.closestVecFW(choi0,params.stateTest,probTest,testCons,dimA,dimAPrime,dimB,options);
+
+switch options.frankWolfeMethod
+    case "vanilla"
+        [vecFW,relEntStep1,exitFlag,output] = FrankWolfe.vanilla(vecFWInit, func,...
+            gradFunc, subProblemFunc, debugInfo, options.verboseLevel>=1,...
+            "linearSearchMinStep",options.linearSearchMinStep, ...
+            "linearSearchPrecision",options.linearSearchPrecision,...
+            "maxGap",options.maxGap,...
+            "maxIter",options.maxIter,...
+            "stopNegGap",options.stopNegGap,...
+            "storePoints",true);
+    case "pairwise"
+        [vecFW,relEntStep1,exitFlag,output] = FrankWolfe.pairwise(vecFWInit, func,...
+            gradFunc, subProblemFunc, debugInfo, options.verboseLevel>=1,...
+            "tolVert",options.tolVert,...
+            "linearSearchPrecision",options.linearSearchPrecision,...
+            "maxGap",options.maxGap,...
+            "maxIter",options.maxIter,...
+            "stopNegGap",options.stopNegGap,...
+            "storePoints",true);
+end
+
+% Warn the user if FW had any problems.
+if options.verboseLevel >= 1
+    switch exitFlag
+        case FrankWolfeExitFlag.exceededMaxIter
+            warning("FW2StepSolver:ExceededMaxIter", ...
+                "Exceeded maximum number of Frank-Wolfe iterations.")
+        case FrankWolfeExitFlag.subproblemFailed
+            warning("FW2StepSolver:SubproblemFailed",...
+                "Subproblem function could not determine step direction. " + ...
+                "Using point from last iteration.")
+    end
+end
+
+debugInfo.storeInfo("relEntStep1",relEntStep1);
+
+%% step 2
+
+% using the final point from FW
+deltaVec = subProblemFunc(vecFW,gradFunc(vecFW));
+gap = -FrankWolfe.inProdR(deltaVec,gradFunc(vecFW));
+relEntLowerBound = func(vecFW) - abs(gap);
+
+% using the best lowerbound point from FW (currently we trust our func and
+% gradfunc enough to use the value output by FW directly)
+if output.lowerBoundFWVal > relEntLowerBound
+    fprintf("!!A better point was found!!\nold %e, new %e\n",relEntLowerBound,output.lowerBoundFWVal)
+end
+relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
+
+% testing the new step 2
+vecFWs = debugInfo.info.pointsQueue.toCell;%{vecFW;output.lowerBoundFWPoint};
+vecGrads = cellfun(@(x) gradFunc(x), vecFWs,"UniformOutput",false);
+constOffsets = cellfun(@(x,y) func(x)-FrankWolfe.inProdR(x,y),vecFWs,vecGrads);
+[testLowerBound,exitFlag] = RenyiTildeDownPA.simpleStep2(constOffsets,vecGrads,params.stateTest,dimAPrime,probTest,testCons,options);
+%disp(exitFlag)
+
+if testLowerBound > relEntLowerBound
+    fprintf("!!A better point was found using new step 2!!\nold %e, new %e\n",relEntLowerBound,testLowerBound)
+end
+
+%Store best lower bound
+relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
+debugInfo.storeInfo("relEntLowerBound",relEntLowerBound);
+
+%% Find QES for variable length
+if options.QESMode
+    
+    %Optimal linearization point
+    optimalLinPoint = output.lowerBoundFWPoint;
+
+    [qesGrad,tolGrad] = QESFinder.getGradQES(optimalLinPoint,gradFunc(optimalLinPoint),...
+                    params.stateTest,dimAPrime,probTest,testCons,options);
+    
+    funcQes         =   @(vecQesFW) QESFinder.funcFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
+    gradFuncQes     =   @(vecQesFW) QESFinder.gradFuncFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
+    subProblemFuncQes  =   @(vecQesFW,vecQesGrad) QESFinder.subproblemQes(vecQesFW,vecQesGrad,params.stateTest,dimAPrime,testCons,options);
+    
+    %Initial point for FW iteration    
+    vecQesInit = QESFinder.initPoint(optimalLinPoint(1:end-1),params.stateTest,testCons,dimAPrime);
+    
+    debugQES = debugInfo.addLeaves("QES");
+    switch options.frankWolfeMethod
+        case "vanilla"
+            [vecQes,qesConst,exitFlagQes,outputQes] = FrankWolfe.vanilla(vecQesInit, funcQes,...
+                gradFuncQes, subProblemFuncQes, debugQES, options.verboseLevel>=1,...
+                "linearSearchMinStep",options.linearSearchMinStep, ...
+                "linearSearchPrecision",options.linearSearchPrecision,...
+                "maxGap",options.maxGap,...
+                "maxIter",options.maxIter,...
+                "storePoints",false);
+        case "pairwise"
+            [vecQes,qesConst,exitFlagQes,outputQes] = FrankWolfe.pairwise(vecQesInit, funcQes,...
+                gradFuncQes, subProblemFuncQes, debugQES, options.verboseLevel>=1,...
+                "tolVert",options.tolVert,...
+                "linearSearchPrecision",options.linearSearchPrecision,...
+                "maxGap",options.maxGap,...
+                "maxIter",options.maxIter,...
+                "storePoints",false);
+    end
+    debugInfo.storeInfo("qesConstStep1",qesConst);
+
+    % Warn the user if FW had any problems.
+    if options.verboseLevel >= 1
+        switch exitFlagQes
+            case FrankWolfeExitFlag.exceededMaxIter
+                warning("FW2StepSolver:ExceededMaxIter", ...
+                    "Exceeded maximum number of Frank-Wolfe iterations in QES.")
+            case FrankWolfeExitFlag.subproblemFailed
+                warning("FW2StepSolver:SubproblemFailed",...
+                    "Subproblem function could not determine step direction in QES. " + ...
+                    "Using point from last iteration.")
+        end
+    end
+    
+    %step 2 for QES
+    [deltaVecQes,exitFlagStep2Qes,extraOut,tolKappa] = subProblemFuncQes(vecQes,gradFuncQes(vecQes));
+    gapQes = -FrankWolfe.inProdR(deltaVecQes,gradFuncQes(vecQes));
+    qesConstLowerBound = funcQes(vecQes) - abs(gapQes);
+    % qesConstLowerBound = -1/(alphaHat-1)*log2(-(funcQes(vecQes) - abs(gapQes)));
+    
+    %Pick best lowerbound
+    if outputQes.lowerBoundFWVal > qesConstLowerBound
+        fprintf("!!A better QES constant was found!!\nold %e, new %e\n",qesConstLowerBound,outputQes.lowerBoundFWVal);
+    end
+    qesConstLowerBound = max(qesConstLowerBound,outputQes.lowerBoundFWVal);
+
+    %Store QES as a cell array
+    qesCell = {qesGrad,qesConstLowerBound};
+    debugInfo.storeInfo("qesCell",qesCell);
+end
+
+end
+
