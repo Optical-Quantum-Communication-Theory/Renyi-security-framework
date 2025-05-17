@@ -30,10 +30,10 @@ qkdInput.addFixedParameter("depolarization", 0.03); %depol = 0.03
 % qkdInput.addScanParameter("probTest", num2cell(linspace(0.0001,0.05,8)))
 
 % %optimzed probTest
-probTest.lowerBound = 0.01;
-probTest.upperBound = 0.5;
-probTest.initVal = 0.1;
-qkdInput.addOptimizeParameter("probTest", probTest);
+% probTest.lowerBound = 0.01;
+% probTest.upperBound = 0.5;
+% probTest.initVal = 0.1;
+% qkdInput.addOptimizeParameter("probTest", probTest);
 
 %Error correction efficiency f >= 1, f=1 is at Shanon limit
 qkdInput.addFixedParameter("fEC",1.1);
@@ -45,11 +45,11 @@ qkdInput.addFixedParameter("fEC",1.1);
 %scan alpha
 % qkdInput.addScanParameter("logrenyiAlpha", num2cell(linspace(-5,-0.6,20)))
 
-% %optimzed alpha
-logrenyiAlpha.lowerBound = -5;
-logrenyiAlpha.upperBound = -0.5;
-logrenyiAlpha.initVal = -4;
-qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
+% % %optimzed alpha
+% logrenyiAlpha.lowerBound = -5;
+% logrenyiAlpha.upperBound = -0.5;
+% logrenyiAlpha.initVal = -4;
+% qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
 
 %%  Finite-Size Correction parameters
 
@@ -75,13 +75,13 @@ qkdInput.setKeyRateModule(keyModule);
 
 % optimization
 
-% % coordinate descent
-% optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0),...
-%     struct("verboseLevel",0));
+% coordinate descent
+optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0,"maxIterations",3,"linearResolution",8),...
+    struct("verboseLevel",0));
 
-%direct search
-optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
-    struct("verboseLevel",0,"linearResolution",50,"meshSize",0.5),struct("verboseLevel",0));
+% %direct search
+% optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
+%     struct("verboseLevel",0,"linearResolution",50,"meshSize",0.5),struct("verboseLevel",0));
 
 qkdInput.setOptimizerModule(optimizerMod);
 
@@ -104,4 +104,4 @@ mathSolverMod = QKDMathSolverModule(@renyiFrankWolfeSolver,mathSolverOptions);
 qkdInput.setMathSolverModule(mathSolverMod);
 
 %% global options
-qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","Mosek", "cvxPrecision", "high"));
+qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","mosek", "cvxPrecision", "high"));
