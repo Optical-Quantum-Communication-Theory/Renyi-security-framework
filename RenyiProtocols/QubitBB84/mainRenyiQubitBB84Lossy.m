@@ -42,7 +42,7 @@ for indexSignals = 1:numel(N_list)
         qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
 
         %Add probTest from optimal values
-        %fixed alpha
+        %fixed probTest
         probTest = optvals(indexLoss,2);
         qkdInput.addFixedParameter("probTest", probTest);
 
