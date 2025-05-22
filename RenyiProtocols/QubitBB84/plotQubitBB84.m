@@ -21,12 +21,12 @@ keyRatesN10 = parseKeyRates(matN10,numLoss);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Results EUR
-matEURN5 = readmatrix("EUR Qubit Data/EURQubitBB84Results_1.00e+05CP_depol.csv");
-matEURN6 = readmatrix("EUR Qubit Data/EURQubitBB84Results_1.00e+06CP_depol.csv"); 
-matEURN7 = readmatrix("EUR Qubit Data/EURQubitBB84Results_1.00e+07CP_depol.csv");
-matEURN8 = readmatrix("EUR Qubit Data/EURQubitBB84Results_1.00e+08CP_depol.csv");
-matEURN9 = readmatrix("EUR Qubit Data/EURQubitBB84Results_1.00e+09CP_depol.csv");
-matEURN10 = readmatrix("EUR Qubit Data/EURQubitBB84Results_1.00e+10CP_depol.csv");
+matEURN5 = readmatrix("EUR Data/EURQubitBB84Results_1.00e+05CP_depol.csv");
+matEURN6 = readmatrix("EUR Data/EURQubitBB84Results_1.00e+06CP_depol.csv"); 
+matEURN7 = readmatrix("EUR Data/EURQubitBB84Results_1.00e+07CP_depol.csv");
+matEURN8 = readmatrix("EUR Data/EURQubitBB84Results_1.00e+08CP_depol.csv");
+matEURN9 = readmatrix("EUR Data/EURQubitBB84Results_1.00e+09CP_depol.csv");
+matEURN10 = readmatrix("EUR Data/EURQubitBB84Results_1.00e+10CP_depol.csv");
 
 keyRatesEURN5 = matEURN5(:,2);
 keyRatesEURN6 = matEURN6(:,2);
