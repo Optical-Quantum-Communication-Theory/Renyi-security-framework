@@ -1,4 +1,4 @@
-function qkdInput = RenyiDecoyBB84ActiveLossyPreset()
+function qkdInput = RenyiDecoyBB84ActiveLossyPreset_2Decoy()
 % BasicBB84LossyPreset a preset for a simple BB84 protocol with a lossy
 % channel. Loss is included as a third dimension orthogonal to Here,
 % Schmidt decomposition was used to shrink Alice from a 4d space to a 2d
@@ -29,12 +29,12 @@ qkdInput.addFixedParameter("misalignmentAngle",0.03);
 
 %Decoys 
 % qkdInput.addFixedParameter("GROUP_decoys_1", 0.9); %signal intensity
-qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",0,"initVal",0.85,"upperBound",1)); %signal intensity
+% qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",0,"initVal",0.85,"upperBound",1)); %signal intensity
 
 qkdInput.addFixedParameter("GROUP_decoys_2", 0.02); % decoy intensity 1
 % qkdInput.addOptimizeParameter("GROUP_decoys_2", struct("lowerBound",0,"initVal",0.1,"upperBound",1)); % decoy intensity 1
 
-qkdInput.addFixedParameter("GROUP_decoys_3", 0.001); % decoy intensity 2 (something slightly above 0 is usually optimal.) %0.001 for EAT
+qkdInput.addFixedParameter("GROUP_decoys_3", 0.001); % decoy intensity 2 (something slightly above 0 is usually optimal.)
 
 %Probabilities of sending decoys conditioned on test rounds p(mu|test)
 qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/3);
@@ -51,29 +51,23 @@ qkdInput.addFixedParameter("probDecoyConGen", [1, 0, 0]);
 %Define basis choice probability of Alice and Bob (Z basis)
 % qkdInput.addFixedParameter("probTest",0.05);
 
-probTest.lowerBound = 0.0001;
-probTest.upperBound = 0.9;
-probTest.initVal = 0.06;
-qkdInput.addOptimizeParameter("probTest", probTest);
+% probTest.lowerBound = 0.0001;
+% probTest.upperBound = 0.9;
+% probTest.initVal = 0.06;
+% qkdInput.addOptimizeParameter("probTest", probTest);
 
 %Error correction efficiency f >= 1, f=1 is at Shanon limit
 qkdInput.addFixedParameter("fEC",1.1);
 
 %Alpha parameter of Renyi entropy
 %fixed alpha
-% qkdInput.addFixedParameter("renyiAlpha",1.001);
 % qkdInput.addFixedParameter("logrenyiAlpha",-4);
 
 %optimzed alpha
-% renyiAlpha.lowerBound = 1.0001;
-% renyiAlpha.upperBound = 2;
-% renyiAlpha.initVal = 1.01;
-% qkdInput.addOptimizeParameter("renyiAlpha", renyiAlpha);
-
-logrenyiAlpha.lowerBound = -5;
-logrenyiAlpha.upperBound = -0.5;
-logrenyiAlpha.initVal = -3;
-qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
+% logrenyiAlpha.lowerBound = -5;
+% logrenyiAlpha.upperBound = -0.5;
+% logrenyiAlpha.initVal = -3;
+% qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
 
 % Finite-Size Correction parameters
 
