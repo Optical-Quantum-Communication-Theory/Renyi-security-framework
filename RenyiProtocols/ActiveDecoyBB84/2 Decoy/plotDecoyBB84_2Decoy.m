@@ -1,24 +1,23 @@
-% %% Results GREAT
-% matN5 = load("data/RenyiDecoyBB84LossyResults_1.00e+05.mat");
-% matN6 = load("data/RenyiDecoyBB84LossyResults_1.00e+06.mat"); 
-% matN7 = load("data/RenyiDecoyBB84LossyResults_1.00e+07.mat");
-% matN8 = load("data/RenyiDecoyBB84LossyResults_1.00e+08.mat");
-% matN9 = load("data/RenyiDecoyBB84LossyResults_1.00e+09.mat");
-% matN10 = load("data/RenyiDecoyBB84LossyResults_1.00e+10.mat");
-% matN11 = load("data/RenyiDecoyBB84LossyResults_1.00e+11.mat");
-% 
-% %number of loss values used
-% numLoss = 26;
-% 
-% %key rates
-% keyRatesN4 = parseKeyRates(matN4,numLoss);
-% keyRatesN5 = parseKeyRates(matN5,numLoss);
-% keyRatesN6 = parseKeyRates(matN6,numLoss);
-% keyRatesN7 = parseKeyRates(matN7,numLoss);
-% keyRatesN8 = parseKeyRates(matN8,numLoss);
-% keyRatesN9 = parseKeyRates(matN9,numLoss);
-% keyRatesN10 = parseKeyRates(matN10,numLoss);
-% keyRatesN11 = parseKeyRates(matN11,numLoss);
+%% Results GREAT
+matN5 = load("data/RenyiDecoyBB84LossyResults_1.00e+05.mat");
+matN6 = load("data/RenyiDecoyBB84LossyResults_1.00e+06.mat"); 
+matN7 = load("data/RenyiDecoyBB84LossyResults_1.00e+07.mat");
+matN8 = load("data/RenyiDecoyBB84LossyResults_1.00e+08.mat");
+matN9 = load("data/RenyiDecoyBB84LossyResults_1.00e+09.mat");
+matN10 = load("data/RenyiDecoyBB84LossyResults_1.00e+10.mat");
+matN11 = load("data/RenyiDecoyBB84LossyResults_1.00e+11.mat");
+
+%number of loss values used
+numLoss = 26;
+
+%key rates
+keyRatesN5 = parseKeyRates(matN5,numLoss);
+keyRatesN6 = parseKeyRates(matN6,numLoss);
+keyRatesN7 = parseKeyRates(matN7,numLoss);
+keyRatesN8 = parseKeyRates(matN8,numLoss);
+keyRatesN9 = parseKeyRates(matN9,numLoss);
+keyRatesN10 = parseKeyRates(matN10,numLoss);
+keyRatesN11 = parseKeyRates(matN11,numLoss);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Results EUR
@@ -29,7 +28,6 @@ matEURN9 = readmatrix("EUR Data/EURDecoyBB84Results_1.00e+09CP.csv");
 matEURN10 = readmatrix("EUR Data/EURDecoyBB84Results_1.00e+10CP.csv");
 matEURN11 = readmatrix("EUR Data/EURDecoyBB84Results_1.00e+11CP.csv");
 
-keyRatesEURN5 = matEURN5(:,2);
 keyRatesEURN6 = matEURN6(:,2);
 keyRatesEURN7 = matEURN7(:,2);
 keyRatesEURN8 = matEURN8(:,2);
