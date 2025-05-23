@@ -1,11 +1,11 @@
 %pick preset
-qkdInput = RenyiDecoyBB84ActiveLossyPreset();
+qkdInput = RenyiDecoyBB84ActiveLossyPreset_1Decoy();
 
 %run the QKDSolver with this input and store results
 results = MainIteration(qkdInput);
 
 %save the results and preset to a file.
-save("RenyiDecoyBB84LossyResults.mat","results","qkdInput");
+% save("RenyiDecoyBB84LossyResults.mat","results","qkdInput");
 
 %% plot the result
 keyRateFixed = arrayfun(@(x) x.debugInfo.keyRateModule.keyRateFixed, results);
