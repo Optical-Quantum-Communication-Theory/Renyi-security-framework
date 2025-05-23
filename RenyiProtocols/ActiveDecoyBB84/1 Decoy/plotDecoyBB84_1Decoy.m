@@ -11,7 +11,6 @@ matN11 = load("data/RenyiDecoyBB84LossyResults_1.00e+11_1decoy.mat");
 numLoss = 26;
 
 %key rates
-keyRatesN4 = parseKeyRates(matN4,numLoss);
 keyRatesN5 = parseKeyRates(matN5,numLoss);
 keyRatesN6 = parseKeyRates(matN6,numLoss);
 keyRatesN7 = parseKeyRates(matN7,numLoss);
@@ -29,7 +28,6 @@ matEURN9 = readmatrix("EUR Data/ActiveDecoyBB84_1Decoy_1.00e+09.csv");
 matEURN10 = readmatrix("EUR Data/ActiveDecoyBB84_1Decoy_1.00e+10.csv");
 matEURN11 = readmatrix("EUR Data/ActiveDecoyBB84_1Decoy_1.00e+11.csv");
 
-keyRatesEURN5 = matEURN5(:,2);
 keyRatesEURN6 = matEURN6(:,2);
 keyRatesEURN7 = matEURN7(:,2);
 keyRatesEURN8 = matEURN8(:,2);
