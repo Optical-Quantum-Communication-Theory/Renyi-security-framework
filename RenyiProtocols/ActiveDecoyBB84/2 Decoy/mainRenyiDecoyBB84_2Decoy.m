@@ -1,4 +1,5 @@
 %pick preset
+clear all
 qkdInput = RenyiDecoyBB84ActiveLossyPreset_2Decoy();
 
 %List of mutiple total signals sent
