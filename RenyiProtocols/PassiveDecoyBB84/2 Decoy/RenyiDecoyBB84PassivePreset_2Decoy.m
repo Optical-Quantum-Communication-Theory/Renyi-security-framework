@@ -1,4 +1,4 @@
-function qkdInput = RenyiDecoyBB84PassivePreset()
+function qkdInput = RenyiDecoyBB84PassivePreset_2Decoy()
 % BasicBB84LossyPreset a preset for a simple BB84 protocol with a lossy
 % channel. Loss is included as a third dimension orthogonal to Here,
 % Schmidt decomposition was used to shrink Alice from a 4d space to a 2d
@@ -9,7 +9,7 @@ qkdInput = QKDSolverInput();
 %% Parameters
 
 %Add loss
-lossdB = linspace(0,60,16);
+% lossdB = linspace(0,60,16);
 % transmittance = 10.^(-lossdB/10);
 % transmittance = transmittance(1);
 % transmittance = 10.^(-2.8);
@@ -46,24 +46,24 @@ qkdInput.addFixedParameter("GROUP_decoys_1", decoy1); %signal intensity
 qkdInput.addFixedParameter("GROUP_decoys_2", decoy2); % decoy intensity 1
 % qkdInput.addOptimizeParameter("GROUP_decoys_2", struct("lowerBound",0,"initVal",0.1,"upperBound",1)); % decoy intensity 1
 
-% qkdInput.addFixedParameter("GROUP_decoys_3", decoy3); % decoy intensity 2 (something slightly above 0 is usually optimal.) %0.001 for EAT
+qkdInput.addFixedParameter("GROUP_decoys_3", decoy3); % decoy intensity 2 (something slightly above 0 is usually optimal.) %0.001 for EAT
 
 %Tolerances in decoy intensities
 qkdInput.addFixedParameter("GROUP_deltaDecoys_1", decoy1*(1/(1-delta) - 1)); %signal intensity
 qkdInput.addFixedParameter("GROUP_deltaDecoys_2", decoy2*(1/(1-delta) - 1)); %decoy intensity 1
-% qkdInput.addFixedParameter("GROUP_deltaDecoys_3", decoy3*(1/(1-delta) - 1)); %decoy intensity 2
+qkdInput.addFixedParameter("GROUP_deltaDecoys_3", decoy3*(1/(1-delta) - 1)); %decoy intensity 2
 
 %Probabilities of sending decoys conditioned on test rounds p(mu|test)
-% qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/3);
-% qkdInput.addFixedParameter("GROUP_decoyProbs_2",1/3);
-% qkdInput.addFixedParameter("GROUP_decoyProbs_3",1/3);
+qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/3);
+qkdInput.addFixedParameter("GROUP_decoyProbs_2",1/3);
+qkdInput.addFixedParameter("GROUP_decoyProbs_3",1/3);
 
-qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/2);
-qkdInput.addFixedParameter("GROUP_decoyProbs_2",1/2);
+% qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/2);
+% qkdInput.addFixedParameter("GROUP_decoyProbs_2",1/2);
 
 %Probability of sending intensities in generation rounds 
-% qkdInput.addFixedParameter("probDecoyConGen", [1, 0, 0]);
-qkdInput.addFixedParameter("probDecoyConGen", [1, 0]);
+qkdInput.addFixedParameter("probDecoyConGen", [1, 0, 0]);
+% qkdInput.addFixedParameter("probDecoyConGen", [1, 0]);
 
 %Bob's probabilities of choosing each basis
 qkdInput.addFixedParameter("probsB", [0.8, 0.2]);
