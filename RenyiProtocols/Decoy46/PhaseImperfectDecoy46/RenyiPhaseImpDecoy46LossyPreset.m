@@ -9,11 +9,11 @@ qkdInput = QKDSolverInput();
 %% Parameters
 
 %Add loss
-lossdB = linspace(0,60,16);
-transmittance = 10.^(-lossdB/10);
-transmittance = transmittance(1);
+% lossdB = linspace(0,60,16);
+% transmittance = 10.^(-lossdB/10);
+% transmittance = transmittance(1);
 % transmittance = 10.^(-1);
-qkdInput.addScanParameter("transmittance", num2cell(transmittance));
+% qkdInput.addScanParameter("transmittance", num2cell(transmittance));
 
 %Add birefringence
 % qkdInput.addFixedParameter("birefringenceAngle", 0);
@@ -47,7 +47,7 @@ qkdInput.addFixedParameter("GROUP_decoys_2", 0.2); % decoy intensity 1
 % qkdInput.addFixedParameter("GROUP_decoyProbs_3",1/3);
 
 %Phase randomization quality factor
-qkdInput.addFixedParameter("phaseRandomQuality",0.99); %0.99
+qkdInput.addFixedParameter("phaseRandomQuality",0.99); %q = 0.99
 
 qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/2);
 qkdInput.addFixedParameter("GROUP_decoyProbs_2",1/2);
@@ -84,7 +84,7 @@ qkdInput.addFixedParameter("fEC",1.1);
 
 %Alpha parameter of Renyi entropy
 %fixed alpha
-qkdInput.addFixedParameter("logrenyiAlpha",-3);
+% qkdInput.addFixedParameter("logrenyiAlpha",-3);
 
 %optimzed alpha
 % logrenyiAlpha.lowerBound = -5;
@@ -94,7 +94,7 @@ qkdInput.addFixedParameter("logrenyiAlpha",-3);
 
 % Finite-Size Correction parameters
 
-qkdInput.addFixedParameter("Ntot", 1e10); %total number of signals sent
+% qkdInput.addFixedParameter("Ntot", 1e10); %total number of signals sent
 
 epsilon.EC = (1/2)*1e-80; %failure probability for error-correction
 epsilon.PA = (1/2)*1e-80; %failure probability for privacy amplification
@@ -120,12 +120,12 @@ qkdInput.setKeyRateModule(keyModule);
 
 % optimization
 %coordinate descent
-optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0),...
-    struct("verboseLevel",0));
+% optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0),...
+%     struct("verboseLevel",0));
 
 %direct search
-% optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
-%     struct("verboseLevel",0,"linearResolution",20),struct("verboseLevel",0));
+optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
+    struct("verboseLevel",0,"linearResolution",20),struct("verboseLevel",0));
 
 qkdInput.setOptimizerModule(optimizerMod);
 
