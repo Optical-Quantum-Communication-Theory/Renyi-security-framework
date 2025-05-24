@@ -9,11 +9,11 @@ qkdInput = QKDSolverInput();
 %% Parameters
 
 %Add loss
-lossdB = linspace(0,60,16);
-transmittance = 10.^(-lossdB/10);
-transmittance = transmittance(1);
-% transmittance = 10.^(-2.8);
-qkdInput.addScanParameter("transmittance", num2cell(transmittance));
+% lossdB = linspace(0,60,16);
+% transmittance = 10.^(-lossdB/10);
+% transmittance = transmittance(1);
+% % transmittance = 10.^(-2.8);
+% qkdInput.addScanParameter("transmittance", num2cell(transmittance));
 
 %Add birefringence
 % qkdInput.addFixedParameter("birefringenceAngle", 0);
@@ -33,7 +33,7 @@ qkdInput.addFixedParameter("misalignmentAngle",0.03);
 qkdInput.addFixedParameter("detectorEfficiency", ones(6,1));
 
 %Decoys 
-qkdInput.addFixedParameter("GROUP_decoys_1", 0.8); %signal intensity
+qkdInput.addFixedParameter("GROUP_decoys_1", 0.9); %signal intensity
 % qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",0,"initVal",0.85,"upperBound",1)); %signal intensity
 
 qkdInput.addFixedParameter("GROUP_decoys_2", 0.2); % decoy intensity 1
@@ -76,17 +76,18 @@ qkdInput.addFixedParameter("fEC",1.1);
 
 %Alpha parameter of Renyi entropy
 %fixed alpha
-qkdInput.addFixedParameter("renyiAlpha",1.01);
+% qkdInput.addFixedParameter("logrenyiAlpha", -3);
 
-% %optimzed alpha
-% renyiAlpha.lowerBound = 1.0001;
-% renyiAlpha.upperBound = 1.5;
-% renyiAlpha.initVal = 1.01;
-% qkdInput.addOptimizeParameter("renyiAlpha", renyiAlpha);
+% optimize alpha
+% logrenyiAlpha.lowerBound = -5;
+% logrenyiAlpha.upperBound = -0.5;
+% logrenyiAlpha.initVal = -3;
+% qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
+
 
 % Finite-Size Correction parameters
 
-qkdInput.addFixedParameter("Ntot", 1e10); %total number of signals sent
+% qkdInput.addFixedParameter("Ntot", 1e10); %total number of signals sent
 
 epsilon.EC = (1/2)*1e-80; %failure probability for error-correction
 epsilon.PA = (1/2)*1e-80; %failure probability for privacy amplification
