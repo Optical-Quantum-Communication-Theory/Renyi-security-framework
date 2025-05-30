@@ -21,10 +21,10 @@ qkdInputSave = qkdInput;
 
 for indexNumsig = 1:numel(N_list)
     %set transmittance list for current value of N
-    transmittanceTemp = transmittance(1:lossList(indexSignals));
+    transmittanceTemp = transmittance(1:lossList(indexNumsig));
 
     %Load optimal values for current number of signal values
-    fileStrTemp = filestrOptVals + sprintf("%.2e",N_list(indexSignals)) +"_q=9.90e-01.csv";
+    fileStrTemp = filestrOptVals + sprintf("%.2e",N_list(indexNumsig)) +"_q=9.90e-01.csv";
     %optimal values are sorted in coulmns as | logRenyiAlpha | ...
     optvals = readmatrix(fileStrTemp);
 
@@ -56,7 +56,7 @@ for indexNumsig = 1:numel(N_list)
     qkdInput.addScanParameter("transmittance", num2cell(transmittanceTemp));
     
     %filestring for saving
-    filestr = sprintf("RenyiDecoy46Results_%.2e",N_list(indexNumsig)) ...
+    filestr = sprintf("../data/RenyiDecoy46Results_%.2e",N_list(indexNumsig)) ...
     + sprintf("_q=%.2e",0.99) + "_1decoy.mat";
 
     % save the results and preset to a file
