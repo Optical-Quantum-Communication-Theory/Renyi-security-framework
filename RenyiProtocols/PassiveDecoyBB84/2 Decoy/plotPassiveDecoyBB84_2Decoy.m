@@ -5,48 +5,48 @@ optVarNames = {'logRenyiAlpha'};
 
 %% delta = 0
 %N=1e6
-matN6d0 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=0.00e+00.mat");
+matN6d0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=0.00e+00.mat");
 [keyRatesN6d0,optvalsN6d0] = parseKeyRatesAndOptVals(matN6d0,numLoss,optVarNames);
 
 %N=1e8
-matN8d0 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=0.00e+00.mat");
+matN8d0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=0.00e+00.mat");
 [keyRatesN8d0,optvalsN8d0] = parseKeyRatesAndOptVals(matN8d0,numLoss,optVarNames);
 
 %N=1e10
-matN10d0 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=0.00e+00.mat");
+matN10d0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=0.00e+00.mat");
 [keyRatesN10d0,optvalsN10d0] = parseKeyRatesAndOptVals(matN10d0,numLoss,optVarNames);
 
 %% delta = 1e-6
 %N=1e6
-matN6d6 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-06.mat");
+matN6d6 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-06.mat");
 [keyRatesN6d6,optvalsN6d6] = parseKeyRatesAndOptVals(matN6d6,numLoss,optVarNames);
 
 %N=1e8
-matN8d6 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-06.mat");
+matN8d6 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-06.mat");
 [keyRatesN8d6,optvalsN8d6] = parseKeyRatesAndOptVals(matN8d6,numLoss,optVarNames);
 
 %N=1e10
-matN10d6 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-06.mat");
+matN10d6 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-06.mat");
 [keyRatesN10d6, optvalsN10d6] = parseKeyRatesAndOptVals(matN10d6,numLoss,optVarNames);
 
 %% delta = 1e-4
-matN6d4 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-04.mat");
+matN6d4 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-04.mat");
 [keyRatesN6d4, optvalsN6d4] = parseKeyRatesAndOptVals(matN6d4,numLoss,optVarNames);
 
-matN8d4 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-04.mat");
+matN8d4 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-04.mat");
 [keyRatesN8d4, optvalsN8d4] = parseKeyRatesAndOptVals(matN8d4,numLoss,optVarNames);
 
-matN10d4 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-04.mat");
+matN10d4 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-04.mat");
 [keyRatesN10d4, optvalsN10d4] = parseKeyRatesAndOptVals(matN10d4,numLoss,optVarNames);
 
 %% delat = 1e-2
-matN6d2 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-02.mat");
+matN6d2 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-02.mat");
 [keyRatesN6d2, optvalsN6d2] = parseKeyRatesAndOptVals(matN6d2,numLoss,optVarNames);
 
-matN8d2 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-02.mat");
+matN8d2 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-02.mat");
 [keyRatesN8d2,optvalsN8d2] = parseKeyRatesAndOptVals(matN8d2,numLoss,optVarNames);
 
-matN10d2 = load("2 Decoy/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-02.mat");
+matN10d2 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-02.mat");
 [keyRatesN10d2,optvalsN10d2] = parseKeyRatesAndOptVals(matN10d2,numLoss,optVarNames);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
