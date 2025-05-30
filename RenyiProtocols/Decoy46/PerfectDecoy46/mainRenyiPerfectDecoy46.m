@@ -3,7 +3,8 @@ clear all
 qkdInput = RenyiDecoy46LossyPreset();
 
 %List of mutiple total signals sent
-N_list = [1e6,1e8,1e10];
+% N_list = [1e6,1e8,1e10];
+N_list = [1e10];
 
 %Loss
 %total array of loss values to iterate over
@@ -11,7 +12,9 @@ lossdB = linspace(0,40,21);
 transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss
-lossList = [7,15,18];
+% lossList = [7,14,21];
+lossList = [21];
+
 
 %filestring for optimal values
 filestrOptVals = "optValsDecoy46_N=";
@@ -28,7 +31,7 @@ for indexSignals = 1:numel(N_list)
     %optimal values are sorted in coulmns as | logRenyiAlpha | ...
     optvals = readmatrix(fileStrTemp);
 
-    for indexLoss = 7:numel(transmittanceTemp)
+    for indexLoss = 1:numel(transmittanceTemp)
         fprintf("Iteration %.0f of %.0f for %.0e",indexLoss, numel(transmittanceTemp),N_list(indexSignals))
 
         %Add total signals sent from list above
@@ -55,7 +58,7 @@ for indexSignals = 1:numel(N_list)
     qkdInput.addScanParameter("transmittance", num2cell(transmittanceTemp));
 
     %filestring for saving
-    filestr = sprintf("data/RenyiDecoy46Results_%.2e",N_list(indexSignals)) + "_q=1.00e+00_1decoy.mat";
+    filestr = sprintf("../data/RenyiDecoy46Results_%.2e",N_list(indexSignals)) + "_q=1.00e+00_1decoy.mat";
 
     % save the results and preset to a file
     %save results

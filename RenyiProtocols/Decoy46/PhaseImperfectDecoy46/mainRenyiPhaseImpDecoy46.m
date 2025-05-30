@@ -43,10 +43,10 @@ for indexNumsig = 1:numel(N_list)
         qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
     
         % %optimzed alpha
-        logrenyiAlpha.lowerBound = -5;
-        logrenyiAlpha.upperBound = -0.5;
-        logrenyiAlpha.initVal = logAlpha;
-        qkdInput.addOptimizeParameter("logrenyiAlpha",logrenyiAlpha);
+        % logrenyiAlpha.lowerBound = -5;
+        % logrenyiAlpha.upperBound = -0.5;
+        % logrenyiAlpha.initVal = logAlpha;
+        % qkdInput.addOptimizeParameter("logrenyiAlpha",logrenyiAlpha);
         
         %run the QKDSolver with this input and store results
         results(indexLoss) = MainIteration(qkdInput);

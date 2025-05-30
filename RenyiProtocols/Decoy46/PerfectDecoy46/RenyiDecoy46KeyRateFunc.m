@@ -104,7 +104,8 @@ modParser.addRequiredParam("keyMap",@(x)mustBeA(x,"KeyMapElement"))
 modParser.addRequiredParam("fEC", @(x) mustBeGreaterThanOrEqual(x,1));
 
 modParser.addRequiredParam("probTest",@(x) x>=0);
-modParser.addRequiredParam("renyiAlpha",@(x)mustBeInRange(x,1,2,"exclude-lower"));
+% modParser.addRequiredParam("renyiAlpha",@(x)mustBeInRange(x,1,2,"exclude-lower"));
+modParser.addRequiredParam("logrenyiAlpha",@(x)mustBeInRange(x,-10,0,"exclude-lower"));
 modParser.addOptionalParam("epsilon", @(x) mustBeInRange(x, 0, 1));
 modParser.addRequiredParam("Ntot",@(x) x>0);
 
@@ -176,6 +177,9 @@ mathSolverInput.probDistPhotonConMuTest = probDistPhotonConMuTest;
 
 mathSolverInput.krausOps = params.krausOps;
 mathSolverInput.keyProj = params.keyProj;
+
+%Recast logAlpha to alpha
+params.renyiAlpha = 1 + 10^(params.logrenyiAlpha);
 
 mathSolverInput.renyiAlpha = params.renyiAlpha;
 mathSolverInput.dimAPrime = params.dimAPrime;
