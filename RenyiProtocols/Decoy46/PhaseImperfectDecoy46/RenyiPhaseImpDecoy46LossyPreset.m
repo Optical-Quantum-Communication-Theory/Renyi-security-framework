@@ -12,7 +12,7 @@ qkdInput = QKDSolverInput();
 % lossdB = linspace(0,60,16);
 % transmittance = 10.^(-lossdB/10);
 % transmittance = transmittance(1);
-% transmittance = 10.^(-1);
+% % transmittance = 10.^(-1);
 % qkdInput.addScanParameter("transmittance", num2cell(transmittance));
 
 %Add birefringence
@@ -47,7 +47,7 @@ qkdInput.addFixedParameter("GROUP_decoys_2", 0.2); % decoy intensity 1
 % qkdInput.addFixedParameter("GROUP_decoyProbs_3",1/3);
 
 %Phase randomization quality factor
-qkdInput.addFixedParameter("phaseRandomQuality",0.99); %q = 0.99
+qkdInput.addFixedParameter("phaseRandomQuality",0.99); %0.99
 
 qkdInput.addFixedParameter("GROUP_decoyProbs_1",1/2);
 qkdInput.addFixedParameter("GROUP_decoyProbs_2",1/2);
@@ -120,12 +120,13 @@ qkdInput.setKeyRateModule(keyModule);
 
 % optimization
 %coordinate descent
-% optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0),...
-%     struct("verboseLevel",0));
+optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",2,... 
+    "maxIterations",1,"linearResolution",20),...
+    struct("verboseLevel",0));
 
 %direct search
-optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
-    struct("verboseLevel",0,"linearResolution",20),struct("verboseLevel",0));
+% optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
+%     struct("verboseLevel",0,"linearResolution",20),struct("verboseLevel",0));
 
 qkdInput.setOptimizerModule(optimizerMod);
 
@@ -149,4 +150,4 @@ mathSolverMod = QKDMathSolverModule(@renyiChoiBlockFrankWolfeSolver,mathSolverOp
 qkdInput.setMathSolverModule(mathSolverMod);
 
 %% global options
-qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","Mosek", "cvxPrecision", "high"));
+qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","Mosek_5", "cvxPrecision", "high"));
