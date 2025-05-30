@@ -1,6 +1,6 @@
 # Rényi security framework against coherent attacks applied to decoy-state QKD
 
-This is a public version of the code used in *Rényi security framework against coherent attacks applied to decoy-state QKD* \[[arXiv](https://arxiv.org/abs/2504.12248)\]. This was built for This was built on top of [v2.0.2](https://github.com/Optical-Quantum-Communication-Theory/openQKDsecurity/releases/tag/v2.0.2) of the Open QKD Security package.
+This is a public version of the code used in *Rényi security framework against coherent attacks applied to decoy-state QKD* \[[arXiv](https://arxiv.org/abs/2504.12248)\]. This was built on top of [v2.0.2](https://github.com/Optical-Quantum-Communication-Theory/openQKDsecurity/releases/tag/v2.0.2) of the Open QKD Security package.
 
 The necessary functions for each protocol can be found in the corresponding folders contained in `RenyiProtocols`. Each folder contains a `main` file which generates the data of the corresponding figure. Furthermore, every folder contains a `plot` file which creates the plot. In the table below we summarize which files need to be run for each figure.
 
