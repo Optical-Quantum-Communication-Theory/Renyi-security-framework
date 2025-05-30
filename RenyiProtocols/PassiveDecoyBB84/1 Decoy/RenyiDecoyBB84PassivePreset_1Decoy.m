@@ -1,4 +1,4 @@
-function qkdInput = RenyiDecoyBB84PassivePreset_1Decoy()
+function qkdInput = RenyiDecoyBB84PassivePreset_1Decoy(delta)
 % BasicBB84LossyPreset a preset for a simple BB84 protocol with a lossy
 % channel. Loss is included as a third dimension orthogonal to Here,
 % Schmidt decomposition was used to shrink Alice from a 4d space to a 2d
@@ -37,7 +37,7 @@ decoy1 = 0.8;
 decoy2 = 0.2;
 % decoy3 = 0.01;
 
-delta = 0;
+% delta = 0;
 
 %Decoys 
 qkdInput.addFixedParameter("GROUP_decoys_1", decoy1); %signal intensity
@@ -155,4 +155,4 @@ mathSolverMod = QKDMathSolverModule(@renyiDecoyIntImpFrankWolfeSolver,mathSolver
 qkdInput.setMathSolverModule(mathSolverMod);
 
 %% global options
-qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","mosek", "cvxPrecision", "high"));
+qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","mosek_5", "cvxPrecision", "high"));
