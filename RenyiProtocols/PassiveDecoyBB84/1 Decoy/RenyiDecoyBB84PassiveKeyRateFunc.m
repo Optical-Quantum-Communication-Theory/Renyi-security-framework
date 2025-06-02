@@ -213,10 +213,10 @@ mathSolverInput.photonDistributionGenLower = photonDistributionGenLower;
 mathSolverInput.photonDistributionGenUpper = photonDistributionGenUpper;
 
 %lower bound on sum_n p_mu(n)
-[decoysGrid,countGrid] = meshgrid(cell2mat(params.decoys) - cell2mat(params.deltaDecoys),0:options.photonCutOff);
+[decoysGrid,countGrid] = meshgrid(cell2mat(params.decoys) + cell2mat(params.deltaDecoys),0:options.photonCutOff);
 probDistPhotonConMuLowerTest = poisson(decoysGrid,countGrid);
 probRemaining = sum(probDistPhotonConMuLowerTest,1);
-mathSolverInput.probRemaining = probRemaining;
+mathSolverInput.probRemaining = min(probRemaining,1);
 
 mathSolverInput.decoyTest = params.decoys;
 mathSolverInput.probDecoyConTest = cell2mat(params.decoyProbs);
