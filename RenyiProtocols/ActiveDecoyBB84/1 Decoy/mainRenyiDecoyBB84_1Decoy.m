@@ -11,7 +11,7 @@ lossdB = linspace(0,50,26);
 transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss
-lossList = [2,8,10,12,17,20,24];
+lossList = [2,8,10,12,17,19,24];
 
 %filestring for optimal values
 filestrOptVals = "optimalValues\optValsActiveDecoyBB84_1_decoy_N=";
