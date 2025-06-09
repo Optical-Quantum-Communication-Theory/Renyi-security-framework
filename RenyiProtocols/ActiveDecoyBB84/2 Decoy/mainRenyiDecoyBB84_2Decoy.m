@@ -3,8 +3,7 @@ clear all
 qkdInput = RenyiDecoyBB84ActiveLossyPreset_2Decoy();
 
 %List of mutiple total signals sent
-N_list = [1e8,1e9,1e10,1e11];
-% N_list = [1e5,1e6,1e7,1e8,1e9,1e10,1e11];
+N_list = [1e5,1e6,1e7,1e8,1e9,1e10,1e11];
 
 %Loss
 %total array of loss values to iterate over
@@ -12,8 +11,7 @@ lossdB = linspace(0,50,26);
 transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss
-% lossList = [2,8,12,14,17,20,22];
-lossList = [12,17,20,22];
+lossList = [2,8,12,14,17,20,22];
 
 %filestring for optimal values
 filestrOptVals = "optValsActiveDecoyBB84_N=";
@@ -31,7 +29,7 @@ for indexSignals = 1:numel(N_list)
     %intensity_1 | ...
     optvals = readmatrix(fileStrTemp);
 
-    for indexLoss = 12:numel(transmittanceTemp)
+    for indexLoss = 1:numel(transmittanceTemp)
         fprintf("Iteration %.0f of %.0f for %.0e",indexLoss, numel(transmittanceTemp),N_list(indexSignals))
 
         %Add total signals sent from list above
@@ -43,32 +41,35 @@ for indexSignals = 1:numel(N_list)
         %Add Renyi param from optimal values
         % fixed alpha
         logAlpha = optvals(indexLoss,1);
-        % qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
+        qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
         
         % optimize alpha
-        logrenyiAlpha.lowerBound = -5;
-        logrenyiAlpha.upperBound = -0.5;
-        logrenyiAlpha.initVal = logAlpha;
-        qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
+        % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
+        % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
+        % logrenyiAlpha.upperBound = bndsLogAlpha(2);
+        % logrenyiAlpha.initVal = logAlpha;
+        % qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
 
         %Add probTest from optimal values
         %fixed probTest
         pTest = optvals(indexLoss,2);
-        % qkdInput.addFixedParameter("probTest", pTest);
+        qkdInput.addFixedParameter("probTest", pTest);
 
-        %optimize probTest
-        probTest.lowerBound = 0.001;
-        probTest.upperBound = 0.9;
-        probTest.initVal = pTest;
-        qkdInput.addOptimizeParameter("probTest", probTest);
+        % %optimize probTest
+        % bndsProbTest = lowerUpperBnds_from_optvals(indexLoss,optvals(:,2),0.01,0.99);
+        % probTest.lowerBound = bndsProbTest(1);
+        % probTest.upperBound = bndsProbTest(2);
+        % probTest.initVal = pTest;
+        % qkdInput.addOptimizeParameter("probTest", probTest);
         
         %Add signal intensity from optimal values
-        %fixed signal intensity
+        % %fixed signal intensity
         signalIntensity = optvals(indexLoss,3);
-        % qkdInput.addFixedParameter("GROUP_decoys_1", signalIntensity); %signal intensity
-        
-        %Optimize signal intensity
-        qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",0.01,"initVal",signalIntensity,"upperBound",1)); %signal intensity
+        qkdInput.addFixedParameter("GROUP_decoys_1", signalIntensity); %signal intensity
+
+        % %Optimize signal intensity
+        % bndsSignal = lowerUpperBnds_from_optvals(indexLoss,optvals(:,3),0.001,1);
+        % qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",bndsSignal(1),"initVal",signalIntensity,"upperBound",bndsSignal(2))); %signal intensity
 
         % run the QKDSolver with this input
         results(indexLoss) = MainIteration(qkdInput);
@@ -77,7 +78,7 @@ for indexSignals = 1:numel(N_list)
     qkdInput.addScanParameter("transmittance", num2cell(transmittanceTemp));
 
     %filestring for saving
-    filestr = sprintf("data/RenyiDecoyBB84LossyResults_%.2e",N_list(indexSignals)) + "_12_end.mat";
+    filestr = sprintf("data/RenyiDecoyBB84LossyResults_%.2e",N_list(indexSignals)) + ".mat";
 
     % save the results and preset to a file
     %save results
