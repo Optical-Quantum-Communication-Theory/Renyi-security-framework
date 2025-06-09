@@ -1,4 +1,5 @@
 %pick preset
+clear all
 qkdInput = RenyiDecoyBB84ActiveLossyPreset_1Decoy();
 
 %List of mutiple total signals sent
@@ -41,16 +42,34 @@ for indexSignals = 1:numel(N_list)
         % fixed alpha
         logAlpha = optvals(indexLoss,1);
         qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
+        
+        % optimize alpha
+        % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
+        % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
+        % logrenyiAlpha.upperBound = bndsLogAlpha(2);
+        % logrenyiAlpha.initVal = logAlpha;
+        % qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
 
         %Add probTest from optimal values
         %fixed probTest
-        probTest = optvals(indexLoss,2);
-        qkdInput.addFixedParameter("probTest", probTest);
+        pTest = optvals(indexLoss,2);
+        qkdInput.addFixedParameter("probTest", pTest);
+
+        % %optimize probTest
+        % bndsProbTest = lowerUpperBnds_from_optvals(indexLoss,optvals(:,2),0.01,0.99);
+        % probTest.lowerBound = bndsProbTest(1);
+        % probTest.upperBound = bndsProbTest(2);
+        % probTest.initVal = pTest;
+        % qkdInput.addOptimizeParameter("probTest", probTest);
         
         %Add signal intensity from optimal values
-        %fixed signal intensity
+        % %fixed signal intensity
         signalIntensity = optvals(indexLoss,3);
         qkdInput.addFixedParameter("GROUP_decoys_1", signalIntensity); %signal intensity
+
+        % %Optimize signal intensity
+        % bndsSignal = lowerUpperBnds_from_optvals(indexLoss,optvals(:,3),0.001,1);
+        % qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",bndsSignal(1),"initVal",signalIntensity,"upperBound",bndsSignal(2))); %signal intensity
 
         % run the QKDSolver with this input
         results(indexLoss) = MainIteration(qkdInput);
