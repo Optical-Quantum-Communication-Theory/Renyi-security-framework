@@ -3,10 +3,10 @@ clear all
 optVarNames = {'logrenyiAlpha','probTest','GROUP_decoys_1'};
 
 % number of points
-numPoints = 20;
+numPoints = 26;
 
 % results from data
-mat = load("data/RenyiDecoyBB84LossyResults_1.00e+11_1decoy_17_end.mat");
+mat = load("data/RenyiDecoyBB84LossyResults_1.00e+11.mat");
 
 
 % Parse key rates and optimal values
