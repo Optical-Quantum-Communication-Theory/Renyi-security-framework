@@ -36,7 +36,7 @@ for indexEps = 1:numel(epsilonInt_List)
         %optimal values are sorted in coulmns as | logRenyiAlpha| ...
         optvals = readmatrix(fileStrTemp);
     
-        for indexLoss = 16:numel(transmittanceTemp)
+        for indexLoss = 1:numel(transmittanceTemp)
             fprintf("Iteration %.0f of %.0f for N=%.0e with eps_int=%.2e",indexLoss,...
                 numel(transmittanceTemp),N_list(indexSignals),epsilonInt_List(indexEps))
     
