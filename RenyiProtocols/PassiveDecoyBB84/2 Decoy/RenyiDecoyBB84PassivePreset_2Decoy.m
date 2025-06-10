@@ -131,7 +131,7 @@ qkdInput.setKeyRateModule(keyModule);
 
 % direct search
 optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
-    struct("verboseLevel",0,"linearResolution",10,"meshSize",0.5),struct("verboseLevel",0));
+    struct("verboseLevel",0,"linearResolution",40,"meshSize",0.5),struct("verboseLevel",0));
 
 qkdInput.setOptimizerModule(optimizerMod);
 
