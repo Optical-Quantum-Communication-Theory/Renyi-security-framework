@@ -49,7 +49,7 @@ for indexEps = 1:numel(epsilonInt_List)
             %Add Renyi param from optimal values
             % fixed alpha
             logAlpha = optvals(indexLoss,1);
-            % qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
+            qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
             
             % optimize alpha
             % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
