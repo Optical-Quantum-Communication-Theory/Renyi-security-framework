@@ -125,13 +125,13 @@ keyModule = QKDKeyRateModule(@RenyiDecoyBB84PassiveKeyRateFunc,struct("photonCut
 qkdInput.setKeyRateModule(keyModule);
 
 % optimization
-%coordinate descent
-optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0),...
-    struct("verboseLevel",0));
+% %coordinate descent
+% optimizerMod = QKDOptimizerModule(@coordinateDescentFunc,struct("verboseLevel",0),...
+%     struct("verboseLevel",0));
 
 % direct search
-% optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
-%     struct("verboseLevel",0,"linearResolution",30,"meshSize",0.5),struct("verboseLevel",0));
+optimizerMod = QKDOptimizerModule(@directSearchOptimization, ...
+    struct("verboseLevel",0,"linearResolution",40,"meshSize",0.5),struct("verboseLevel",0));
 
 qkdInput.setOptimizerModule(optimizerMod);
 
