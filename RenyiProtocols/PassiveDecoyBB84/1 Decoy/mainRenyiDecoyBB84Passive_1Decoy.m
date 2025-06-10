@@ -66,7 +66,7 @@ for indexEps = 1:numel(epsilonInt_List)
     
         %filestring for saving
         filestr = sprintf("data/RenyiDecoyBB84PassiveResults_%.2e",N_list(indexSignals)) + ...
-            sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + "_1decoy_13_end.mat";
+            sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + "_1decoy.mat";
     
         % save the results and preset to a file
         results = results(1:numel(transmittanceTemp));
@@ -75,4 +75,4 @@ for indexEps = 1:numel(epsilonInt_List)
 end
 
 %% plot the last result
-QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","linear","yScaleStyle","log")
+QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","dB","yScaleStyle","log")
