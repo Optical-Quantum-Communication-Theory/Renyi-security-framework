@@ -61,13 +61,13 @@ for indexEps = 1:numel(epsilonInt_List)
             % run the QKDSolver with this input
             results(indexLoss) = MainIteration(qkdInput);
         end
-        %edit qkdinput to save correct results
+        % edit qkdinput to save correct results
         qkdInput.addScanParameter("transmittance", num2cell(transmittanceTemp));
-    
+
         %filestring for saving
         filestr = sprintf("data/RenyiDecoyBB84PassiveResults_%.2e",N_list(indexSignals)) + ...
             sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + ".mat";
-    
+
         % save the results and preset to a file
         %save results
         results = results(1:numel(transmittanceTemp));
