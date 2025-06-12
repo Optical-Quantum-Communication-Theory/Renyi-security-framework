@@ -50,7 +50,7 @@ for indexEps = 1:numel(epsilonInt_List)
             logAlpha = optvals(indexLoss,1);
             qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
                       
-            % optimize alpha
+            % % optimize alpha
             % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
             % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
             % logrenyiAlpha.upperBound = bndsLogAlpha(2);
