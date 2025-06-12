@@ -18,7 +18,6 @@ epsilonInt_List = [0, 1e-6, 1e-4, 1e-2];
 %filestring for optimal values
 filestrOptVals = "optimalValues\optValsPassiveDecoyBB84_1_decoy_N=";
 
-
 for indexEps = 1:numel(epsilonInt_List)
     %pick preset (depends on deviation eps_int
     qkdInput = RenyiDecoyBB84PassivePreset_1Decoy(epsilonInt_List(indexEps));
@@ -63,11 +62,11 @@ for indexEps = 1:numel(epsilonInt_List)
         end
         %edit qkdinput to save correct results
         qkdInput.addScanParameter("transmittance", num2cell(transmittanceTemp));
-    
+
         %filestring for saving
         filestr = sprintf("data/RenyiDecoyBB84PassiveResults_%.2e",N_list(indexSignals)) + ...
             sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + "_1decoy.mat";
-    
+
         % save the results and preset to a file
         results = results(1:numel(transmittanceTemp));
         save(filestr,"results","qkdInput");
@@ -76,3 +75,4 @@ end
 
 %% plot the last result
 QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","dB","yScaleStyle","log")
+
