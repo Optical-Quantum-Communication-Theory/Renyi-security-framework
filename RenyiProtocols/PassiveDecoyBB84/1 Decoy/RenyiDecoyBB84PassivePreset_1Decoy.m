@@ -142,7 +142,7 @@ mathSolverOptions = struct();
 mathSolverOptions.QESMode = true;
 
 mathSolverOptions.initMethod = 1;
-mathSolverOptions.maxIter = 30;
+mathSolverOptions.maxIter = 40;
 mathSolverOptions.maxGap = 1e-10;
 mathSolverOptions.blockDiagonal = true;
 mathSolverOptions.numericPerturbation = 1e-10;
