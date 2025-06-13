@@ -11,7 +11,7 @@ lossdB = linspace(0,50,26);
 transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss
-lossList = [2,8,12,14,17,20,22];
+lossList = [2,4,12,14,17,20,22];
 
 %filestring for optimal values
 filestrOptVals = "optValsActiveDecoyBB84_N=";
@@ -36,14 +36,15 @@ for indexSignals = 1:numel(N_list)
         qkdInput.addFixedParameter("Ntot",N_list(indexSignals))
     
         %Add loss until element from list above
-        qkdInput.addScanParameter("transmittance", num2cell(transmittance(indexLoss)));  
+        qkdInput.addScanParameter("transmittance", num2cell(transmittance(indexLoss)));
+        % qkdInput.addFixedParameter("transmittance", transmittance(indexLoss));  
     
         %Add Renyi param from optimal values
         % fixed alpha
         logAlpha = optvals(indexLoss,1);
         qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
         
-        % optimize alpha
+        % % optimize alpha
         % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
         % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
         % logrenyiAlpha.upperBound = bndsLogAlpha(2);
@@ -61,7 +62,7 @@ for indexSignals = 1:numel(N_list)
         % probTest.upperBound = bndsProbTest(2);
         % probTest.initVal = pTest;
         % qkdInput.addOptimizeParameter("probTest", probTest);
-        
+
         %Add signal intensity from optimal values
         % %fixed signal intensity
         signalIntensity = optvals(indexLoss,3);
@@ -81,10 +82,9 @@ for indexSignals = 1:numel(N_list)
     filestr = sprintf("data/RenyiDecoyBB84LossyResults_%.2e",N_list(indexSignals)) + ".mat";
 
     % save the results and preset to a file
-    %save results
     results = results(1:numel(transmittanceTemp));
     save(filestr,"results","qkdInput");
 end
 
 %% plot the result
-QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","dB","yScaleStyle","log")
+QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","linear","yScaleStyle","log")
