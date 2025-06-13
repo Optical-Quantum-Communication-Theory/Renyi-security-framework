@@ -87,4 +87,4 @@ for indexSignals = 1:numel(N_list)
 end
 
 %% plot the result
-QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","linear","yScaleStyle","log")
+QKDPlot.simple1DPlot(qkdInput,results,"xScaleStyle","dB","yScaleStyle","log")
