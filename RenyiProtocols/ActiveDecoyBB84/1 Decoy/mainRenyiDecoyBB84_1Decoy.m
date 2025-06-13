@@ -36,7 +36,7 @@ for indexSignals = 1:numel(N_list)
         qkdInput.addFixedParameter("Ntot",N_list(indexSignals))
     
         %Add loss until element from list above
-        qkdInput.addScanParameter("transmittance", num2cell(transmittance(indexLoss)));  
+        qkdInput.addScanParameter("transmittance", num2cell(transmittance(indexLoss))); 
     
         %Add Renyi param from optimal values
         % fixed alpha
@@ -66,7 +66,7 @@ for indexSignals = 1:numel(N_list)
         % %fixed signal intensity
         signalIntensity = optvals(indexLoss,3);
         qkdInput.addFixedParameter("GROUP_decoys_1", signalIntensity); %signal intensity
-
+        
         % %Optimize signal intensity
         % bndsSignal = lowerUpperBnds_from_optvals(indexLoss,optvals(:,3),0.001,1);
         % qkdInput.addOptimizeParameter("GROUP_decoys_1", struct("lowerBound",bndsSignal(1),"initVal",signalIntensity,"upperBound",bndsSignal(2))); %signal intensity
@@ -81,7 +81,6 @@ for indexSignals = 1:numel(N_list)
     filestr = sprintf("data/RenyiDecoyBB84LossyResults_%.2e",N_list(indexSignals)) + "_1decoy.mat";
 
     % save the results and preset to a file
-    %save results
     results = results(1:numel(transmittanceTemp));
     save(filestr,"results","qkdInput");
 end
