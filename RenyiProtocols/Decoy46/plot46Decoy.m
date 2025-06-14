@@ -44,8 +44,7 @@ matN8_q099 = load("data/RenyiDecoy46Results_1.00e+08_q=9.90e-01_1decoy.mat");
 [keyRatesN8_q099, optvalsN8_q099] = parseKeyRatesAndOptVals(matN8_q099,numLoss,optVarNames);
 
 %N=1e10
-% matN10_q099 = load("data/RenyiDecoy46Results_1.00e+10_q=9.90e-01_1decoy.mat");
-matN10_q099 = load("data/decoy46Results.mat");
+matN10_q099 = load("data/RenyiDecoy46Results_1.00e+10_q=9.90e-01_1decoy.mat");
 [keyRatesN10_q099, optvalsN10_q099] = parseKeyRatesAndOptVals(matN10_q099,numLoss,optVarNames);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
