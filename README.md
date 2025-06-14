@@ -11,7 +11,7 @@ The necessary functions for each protocol can be found in the corresponding fold
 | Fig. 3 - active decoy BB84 (1 decoy)                                        | `ActiveDecoyBB84/1 Decoy`        | `mainRenyiDecoyBB84_2Decoy.m`        | `plotDecoyBB84_2Decoy.m`         |
 | Fig. 4 - passive decoy BB84 <br> with intensity imperfections (2 decoy)     | `PassiveDecoyBB84/2 Decoy`       | `mainRenyiDecoyBB84Passive_2Decoy.m` | `plotPassiveDecoyBB84_1Decoy.m`  |
 | Fig. 5 - passive decoy BB84 <br> with intensity imperfections (1 decoy)     | `PassiveDecoyBB84/1 Decoy`       | `mainRenyiDecoyBB84Passive_1Decoy.m` | `plotPassiveDecoyBB84_2Decoy.m`  |
-| Fig. 6 - passive decoy 4-6 <br> with phase imperfections (1 decoy), q=1     | `Decoy46/PerfectDecoy46`         | `mainRenyiPerfectDecoy46.m`          | `plot46Decoy.m`                  |
+| Fig. 6 - passive decoy 4-6 <br> w/o phase imperfections (1 decoy), q=1      | `Decoy46/PerfectDecoy46`         | `mainRenyiPerfectDecoy46.m`          | `plot46Decoy.m`                  |
 | Fig. 6 - passive decoy 4-6 <br> with phase imperfections (1 decoy), q=0.99  | `Decoy46/PhaseImperfectDecoy46`  | `mainRenyiPhaseImpDecoy46.m`         | `plot46Decoy.m`                  |
 
 Figure 4 until Figure 6 require MOSEK 10.0.44 (or above). For instalation instructions on the newest version of MOSEK, follow \[[MOSEK](https://www.mosek.com/)].
