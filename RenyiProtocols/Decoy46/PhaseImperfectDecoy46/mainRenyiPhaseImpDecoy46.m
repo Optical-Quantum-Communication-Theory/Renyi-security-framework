@@ -11,7 +11,7 @@ lossdB = linspace(0,40,21);
 transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss with q = 0.99
-lossList = [7,15,18]; 
+lossList = [7,12,16]; 
 
 %filestring for optimal values
 filestrOptVals = "optValsDecoy46_N=";
@@ -42,11 +42,12 @@ for indexNumsig = 1:numel(N_list)
         logAlpha = optvals(indexLoss,1);
         qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
     
-        % %optimzed alpha
-        % logrenyiAlpha.lowerBound = -5;
-        % logrenyiAlpha.upperBound = -0.5;
+        % optimize alpha
+        % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
+        % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
+        % logrenyiAlpha.upperBound = bndsLogAlpha(2);
         % logrenyiAlpha.initVal = logAlpha;
-        % qkdInput.addOptimizeParameter("logrenyiAlpha",logrenyiAlpha);
+        % qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
         
         %run the QKDSolver with this input and store results
         results(indexLoss) = MainIteration(qkdInput);
