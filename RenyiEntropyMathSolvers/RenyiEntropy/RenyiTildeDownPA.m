@@ -1,29 +1,7 @@
 classdef RenyiTildeDownPA
 
     methods (Static)
-        function cost = privacyAmpUniqueAcceptance(choiEveAPrimeB,testStateAAPrime,genStateAAPrime,keyProj,krausOps,testProb,alpha,dimAPrime)
-            % This is broken
-            arguments
-                % minimal checks for shape and type
-                choiEveAPrimeB (:,:) double
-                testStateAAPrime (:,:) double
-                genStateAAPrime (:,:) double
-                keyProj (:,1) cell
-                krausOps (:,1) cell
-                testProb (1,1) double
-                alpha (1,1) double
-                dimAPrime (1,1) uint64
-            end
-
-            dimA = size(genStateAAPrime,1)/dimAPrime;
-            
-            penaltyTerm = penaltyTermUnique(testStateAAPrime,ChoiEveAPrimeB,dimA,testCons,testProb);
-
-            rhoAB = PartialMap(genStateAAPrime,choiEveAPrimeB,2,[dimA,dimAPrime]);
-            cost = penaltyTerm/(alpha-1) + (1-testProb)*RenyiTildeDown.conEnt(rhoAB,keyProj,krausOps,alpha);
-        end
-
-
+        
         %% Frank Wolfe functions
         function val = funcFW(vecFW,genStateAAPrime,keyProj,krausOps,testProb,alpha,dimAPrime,perturbation,perturbationAff)
             arguments
