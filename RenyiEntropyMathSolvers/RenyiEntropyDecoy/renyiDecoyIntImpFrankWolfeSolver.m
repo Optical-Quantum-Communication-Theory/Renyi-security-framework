@@ -426,10 +426,13 @@ if options.QESMode == true
         params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
 
     %Initial point for FW iteration
-    vecQesInit = QESFinderDecoy.initPointIntImperfect(optimalLinPoint(1:end-1),params.stateTest,params.stateGen,...
+    [vecQesInit,exitFlag] = QESFinderDecoy.initPointIntImperfect(optimalLinPoint(1:end-1),params.stateTest,params.stateGen,...
         dimAPrime,testCons,squashingConsTest,squashingConsGen,...
         params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
         params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
+    if exitFlag == SubProblemExitFlag.failed
+        error("Could not find an initial Point for QES Frank Wolfe solver.")
+    end
 
     %% Run FW for QES with lower bound on probability in generation rounds
 

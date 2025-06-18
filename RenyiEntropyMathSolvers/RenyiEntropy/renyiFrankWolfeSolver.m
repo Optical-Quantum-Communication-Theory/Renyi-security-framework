@@ -219,7 +219,6 @@ subProblemFunc = @(vecFW,vecFWGrad) RenyiTildeDownPA.subproblemUnique(vecFW,vecF
 
 % run step 1 routines
 [vecFWInit,exitFlag] = RenyiTildeDownPA.closestVecFW(choi0,params.stateTest,probTest,testCons,dimA,dimAPrime,dimB,options);
-
 if exitFlag == SubProblemExitFlag.failed
     error("Could not find an initial Point for Frank Wolfe solver.")
 end
@@ -264,7 +263,6 @@ debugInfo.storeInfo("relEntStep1",relEntStep1);
 
 % using the final point from FW
 [deltaVec,exitFlag] = subProblemFunc(vecFW,gradFunc(vecFW));
-
 if exitFlag == SubProblemExitFlag.failed
     error("Could not compute gap for step 2.")
 end
@@ -308,9 +306,9 @@ if options.QESMode
     end
 
     
-    funcQes         =   @(vecQesFW) QESFinder.funcFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
-    gradFuncQes     =   @(vecQesFW) QESFinder.gradFuncFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
-    subProblemFuncQes  =   @(vecQesFW,vecQesGrad) QESFinder.subproblemQes(vecQesFW,vecQesGrad,params.stateTest,dimAPrime,testCons,options);
+    funcQes = @(vecQesFW) QESFinder.funcFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
+    gradFuncQes = @(vecQesFW) QESFinder.gradFuncFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
+    subProblemFuncQes = @(vecQesFW,vecQesGrad) QESFinder.subproblemQes(vecQesFW,vecQesGrad,params.stateTest,dimAPrime,testCons,options);
     
     %Initial point for FW iteration    
     vecQesInit = QESFinder.initPoint(optimalLinPoint(1:end-1),params.stateTest,testCons,dimAPrime);
