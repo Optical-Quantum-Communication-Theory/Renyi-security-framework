@@ -1,7 +1,7 @@
 classdef RenyiTildeDownPA
 
     methods (Static)
-        
+
         %% Frank Wolfe functions
         function val = funcFW(vecFW,genStateAAPrime,keyProj,krausOps,testProb,alpha,dimAPrime,perturbation,perturbationAff)
             arguments
@@ -160,7 +160,7 @@ classdef RenyiTildeDownPA
         end
 
         %% Initial point
-        function vecFW = closestVecFW(choi0,testStateAAPrime,testProb,testCons,dimA,dimAPrime,dimB,options)
+        function [vecFW,exitFlag] = closestVecFW(choi0,testStateAAPrime,testProb,testCons,dimA,dimAPrime,dimB,options)
             %solving for closest Choi matrix compatible with our observations
 
 
@@ -241,6 +241,19 @@ classdef RenyiTildeDownPA
 
             % return vecFW
             vecFW = [choiEveAPrimeB(:); phi];
+
+            statusMessage = string(cvx_status);
+
+            switch statusMessage
+                case "Solved"
+                    exitFlag = SubProblemExitFlag.solved;
+                case "Inaccurate/Solved"
+                    exitFlag = SubProblemExitFlag.inaccurate;
+                case "Failed"
+                    exitFlag = SubProblemExitFlag.failed;
+                otherwise
+                    exitFlag = SubProblemExitFlag.failed;
+            end
         end
 
 

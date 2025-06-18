@@ -257,19 +257,22 @@ gradFunc = @(vecFW) RenyiTildeDownChoiBlockPA.gradFuncFW(vecFW,probTest,entropyA
     dimAPrime,params.stateGen,params.keyProj,params.krausOps,params.probBlockCondGen);
 
 subProblemFunc = @(vecFW,vecFWGrad) RenyiTildeDownChoiBlockPA.subproblemUniqueDecoy(vecFW,vecFWGrad,...
-                params.stateTest,params.stateGen,dimAPrime,params.probTest,testCons,squashingConsTest,squashingConsGen,...
-                params.probBlockCondTest,params.probSignalConTestAndBlock,params.probRemaining,...
-                params.epsilonProbTest,params.epsilonBlockCondTest,options);
+    params.stateTest,params.stateGen,dimAPrime,params.probTest,testCons,squashingConsTest,squashingConsGen,...
+    params.probBlockCondTest,params.probSignalConTestAndBlock,params.probRemaining,...
+    params.epsilonProbTest,params.epsilonBlockCondTest,options);
 
 % run step 1 routines
 numInit = dimAPrimeB*dimAPrimeB.' + 1;
 vec0 = zeros(numInit,1);
 grad0 = zeros(numInit,1);
 
-vecFWInit = RenyiTildeDownChoiBlockPA.subproblemUniqueDecoy(vec0,grad0,...
-                params.stateTest,params.stateGen,dimAPrime,params.probTest,testCons,squashingConsTest,squashingConsGen,...
-                params.probBlockCondTest,params.probSignalConTestAndBlock,params.probRemaining,...
-                params.epsilonProbTest,params.epsilonBlockCondTest,options,true);
+[vecFWInit,exitFlag] = RenyiTildeDownChoiBlockPA.subproblemUniqueDecoy(vec0,grad0,...
+    params.stateTest,params.stateGen,dimAPrime,params.probTest,testCons,squashingConsTest,squashingConsGen,...
+    params.probBlockCondTest,params.probSignalConTestAndBlock,params.probRemaining,...
+    params.epsilonProbTest,params.epsilonBlockCondTest,options,true);
+if exitFlag == SubProblemExitFlag.failed
+    error("Could not find an initial Point for Frank Wolfe solver.")
+end
 
 switch options.frankWolfeMethod
     case "vanilla"
@@ -309,11 +312,11 @@ debugInfo.storeInfo("relEntStep1",relEntStep1);
 
 %% step 2
 
-%vector of all FW iterations
-vecFWs = debugInfo.info.pointsQueue.toCell;
-
 % using the final point from FW
 [deltaVec,exitFlagStep2FixedLength,extraOut] = subProblemFunc(vecFW,gradFunc(vecFW));
+if exitFlagStep2FixedLength == SubProblemExitFlag.failed
+    error("Could not find an initial Point for Frank Wolfe solver.")
+end
 gap = -FrankWolfe.inProdR(deltaVec,gradFunc(vecFW));
 relEntLowerBound = func(vecFW) - abs(gap);
 
@@ -323,18 +326,6 @@ if output.lowerBoundFWVal > relEntLowerBound
     fprintf("!!A better point was found!!\nold %e, new %e\n",relEntLowerBound,output.lowerBoundFWVal)
 end
 relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
-
-% % testing the new step 2
-% vecFWs = debugInfo.info.pointsQueue.toCell;%{vecFW;output.lowerBoundFWPoint};
-% vecGrads = cellfun(@(x) gradFunc(x), vecFWs,"UniformOutput",false);
-% constOffsets = cellfun(@(x,y) func(x)-FrankWolfe.inProdR(x,y),vecFWs,vecGrads);
-% [testLowerBound,exitFlag] = RenyiTildeDownPA.simpleStep2(constOffsets,vecGrads,params.stateTest,dimAPrime,probTest,testCons,options);
-% disp(exitFlag)
-% if testLowerBound > relEntLowerBound
-%     fprintf("!!A better point was found using new step 2!!\nold %e, new %e\n",relEntLowerBound,testLowerBound)
-% end
-%
-% relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
 
 debugInfo.storeInfo("relEntLowerBound",relEntLowerBound);
 

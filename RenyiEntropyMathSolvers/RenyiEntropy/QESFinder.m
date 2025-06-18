@@ -1,6 +1,6 @@
 classdef QESFinder
     methods (Static)
-        function [gradQES,tol] = getGradQES(vecFW,vecFWGrad,...
+        function [gradQES,tol,exitFlag] = getGradQES(vecFW,vecFWGrad,...
                 testStateAAPrime,dimAPrime,testProb,testCons,options)
             arguments
                 vecFW (:,1) double

@@ -6,7 +6,7 @@ function [relEntLowerBound,modParser] = renyiFrankWolfeSolver(params,options,deb
 % of the problem. Step 2 of the solver uses the linearization at solution
 % of step 1 (the final iteration) and solves the dual at this point. While
 % also taking into account for constraint violations, due to numerical
-% imprecission, step 2 produces a valid lower bound on the relative
+% imprecision, step 2 produces a valid lower bound on the relative
 % entropy. See "Reliable numerical key rates for quantum key distribution",
 % https://quantum-journal.org/papers/q-2018-07-26-77/, for more details.
 %
@@ -30,8 +30,8 @@ function [relEntLowerBound,modParser] = renyiFrankWolfeSolver(params,options,deb
 %   used in the finite-size analysis.
 % * matrixOneNormConstraints (MatrixOneNormConstraint.empty(0,1)): Array of
 %   class MatrixOneNormConstraints. Represents constraints of the form
-%   ||Phi(rho) - operator||_1 <= scalar, where Phi is a hermitian
-%   preserving superoperator and operator is a hermitian operator and the
+%   ||Phi(rho) - operator||_1 <= scalar, where Phi is a Hermitian
+%   preserving superoperator and operator is a Hermitian operator and the
 %   norm is the trace norm.
 % * blockDimsA: If the blockDiagonal option is true, this is a list that
 %   holds the numbers of dimensions of each block of Alice's system.
@@ -55,10 +55,10 @@ function [relEntLowerBound,modParser] = renyiFrankWolfeSolver(params,options,deb
 % * verboseLevel (global option): See makeGlobalOptionsParser for details.
 % * maxIter (20): maximum number of Frank Wolfe iteration steps taken to
 %   minimize the relative entropy.
-% * maxGap (1e-6): Exit condition for the Frank Wolfe algithm. When the
+% * maxGap (1e-6): Exit condition for the Frank Wolfe algorithm. When the
 %   relative gap between the current and previous iteration is small
-%   enough, the Frank wolfe algorithm exits and returns the current point.
-%   The gap must be a postive scalar.
+%   enough, the Frank Wolfe algorithm exits and returns the current point.
+%   The gap must be a positive scalar.
 % * linearSearchPrecision (1e-20): Precision the fminbnd tries to achieve
 %   when searching along the line between the current point and the points
 %   along the gradient line. See fminbnd and optimset for more details.
@@ -141,7 +141,7 @@ options = optionsParser.Results;
 
 modParser = moduleParser(mfilename);
 
-% kraus operators for G map and key projection operators for Z map
+% Kraus operators for G map and key projection operators for Z map
 modParser.addRequiredParam("krausOps",@mustBeNonempty);
 modParser.addAdditionalConstraint(@isCPTNIKrausOps,"krausOps");
 modParser.addRequiredParam("keyProj",@mustBeNonempty);
@@ -218,7 +218,11 @@ subProblemFunc = @(vecFW,vecFWGrad) RenyiTildeDownPA.subproblemUnique(vecFW,vecF
     params.stateTest,dimAPrime,probTest,testCons,options);
 
 % run step 1 routines
-vecFWInit = RenyiTildeDownPA.closestVecFW(choi0,params.stateTest,probTest,testCons,dimA,dimAPrime,dimB,options);
+[vecFWInit,exitFlag] = RenyiTildeDownPA.closestVecFW(choi0,params.stateTest,probTest,testCons,dimA,dimAPrime,dimB,options);
+
+if exitFlag == SubProblemExitFlag.failed
+    error("Could not find an initial Point for Frank Wolfe solver.")
+end
 
 switch options.frankWolfeMethod
     case "vanilla"
@@ -259,7 +263,12 @@ debugInfo.storeInfo("relEntStep1",relEntStep1);
 %% step 2
 
 % using the final point from FW
-deltaVec = subProblemFunc(vecFW,gradFunc(vecFW));
+[deltaVec,exitFlag] = subProblemFunc(vecFW,gradFunc(vecFW));
+
+if exitFlag == SubProblemExitFlag.failed
+    error("Could not compute gap for step 2.")
+end
+
 gap = -FrankWolfe.inProdR(deltaVec,gradFunc(vecFW));
 relEntLowerBound = func(vecFW) - abs(gap);
 
@@ -270,16 +279,16 @@ if output.lowerBoundFWVal > relEntLowerBound
 end
 relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
 
-% testing the new step 2
-vecFWs = debugInfo.info.pointsQueue.toCell;%{vecFW;output.lowerBoundFWPoint};
-vecGrads = cellfun(@(x) gradFunc(x), vecFWs,"UniformOutput",false);
-constOffsets = cellfun(@(x,y) func(x)-FrankWolfe.inProdR(x,y),vecFWs,vecGrads);
-[testLowerBound,exitFlag] = RenyiTildeDownPA.simpleStep2(constOffsets,vecGrads,params.stateTest,dimAPrime,probTest,testCons,options);
-%disp(exitFlag)
-
-if testLowerBound > relEntLowerBound
-    fprintf("!!A better point was found using new step 2!!\nold %e, new %e\n",relEntLowerBound,testLowerBound)
-end
+% % testing the new step 2
+% vecFWs = debugInfo.info.pointsQueue.toCell;%{vecFW;output.lowerBoundFWPoint};
+% vecGrads = cellfun(@(x) gradFunc(x), vecFWs,"UniformOutput",false);
+% constOffsets = cellfun(@(x,y) func(x)-FrankWolfe.inProdR(x,y),vecFWs,vecGrads);
+% [testLowerBound,exitFlag] = RenyiTildeDownPA.simpleStep2(constOffsets,vecGrads,params.stateTest,dimAPrime,probTest,testCons,options);
+% %disp(exitFlag)
+% 
+% if testLowerBound > relEntLowerBound
+%     fprintf("!!A better point was found using new step 2!!\nold %e, new %e\n",relEntLowerBound,testLowerBound)
+% end
 
 %Store best lower bound
 relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
@@ -291,8 +300,13 @@ if options.QESMode
     %Optimal linearization point
     optimalLinPoint = output.lowerBoundFWPoint;
 
-    [qesGrad,tolGrad] = QESFinder.getGradQES(optimalLinPoint,gradFunc(optimalLinPoint),...
-                    params.stateTest,dimAPrime,probTest,testCons,options);
+    [qesGrad,tolGrad,exitFlag] = QESFinder.getGradQES(optimalLinPoint, ...
+        gradFunc(optimalLinPoint),params.stateTest,dimAPrime,probTest, ...
+        testCons,options);
+    if exitFlag == SubProblemExitFlag.failed
+        error("Could not get gradient for QES.")
+    end
+
     
     funcQes         =   @(vecQesFW) QESFinder.funcFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
     gradFuncQes     =   @(vecQesFW) QESFinder.gradFuncFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,probTest,qesGrad,entropyAlpha,dimAPrime,perturbation,perturbationAff);
@@ -337,6 +351,9 @@ if options.QESMode
     
     %step 2 for QES
     [deltaVecQes,exitFlagStep2Qes,extraOut,tolKappa] = subProblemFuncQes(vecQes,gradFuncQes(vecQes));
+    if exitFlagStep2Qes == SubProblemExitFlag.failed
+        error("Could not compute gap for QES step 2.")
+    end
     gapQes = -FrankWolfe.inProdR(deltaVecQes,gradFuncQes(vecQes));
     qesConstLowerBound = funcQes(vecQes) - abs(gapQes);
     % qesConstLowerBound = -1/(alphaHat-1)*log2(-(funcQes(vecQes) - abs(gapQes)));

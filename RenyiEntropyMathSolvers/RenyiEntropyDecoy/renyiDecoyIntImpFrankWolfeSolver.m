@@ -250,9 +250,9 @@ perturbationAff = options.numericPerturbationAffine;
 
 %SubProblem func equal for both cases
 subProblemFunc = @(vecFW,vecFWGrad) RenyiTildeDownDecoyPA.subproblemUniqueDecoyIntImperfect(vecFW,vecFWGrad,...
-                params.stateTest,params.stateGen,dimAPrime,probTest,testCons,squashingConsTest,squashingConsGen,...
-                params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
-                params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
+    params.stateTest,params.stateGen,dimAPrime,probTest,testCons,squashingConsTest,squashingConsGen,...
+    params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
+    params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
 
 
 %initial point
@@ -260,10 +260,13 @@ numInit = dimAPrimeB*dimAPrimeB.' + 1;
 vec0 = zeros(numInit,1);
 grad0 = zeros(numInit,1);
 
-vecFWInit = RenyiTildeDownDecoyPA.subproblemUniqueDecoyIntImperfect(vec0,grad0,...
-                params.stateTest,params.stateGen,dimAPrime,probTest,testCons,squashingConsTest,squashingConsGen,...
-                params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining,...
-                params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options,true);
+[vecFWInit, exitFlag] = RenyiTildeDownDecoyPA.subproblemUniqueDecoyIntImperfect(vec0,grad0,...
+    params.stateTest,params.stateGen,dimAPrime,probTest,testCons,squashingConsTest,squashingConsGen,...
+    params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining,...
+    params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options,true);
+if exitFlag == SubProblemExitFlag.failed
+    error("Could not find an initial Point for Frank Wolfe solver.")
+end
 
 
 %% Run FW with lower bound on probability in generation rounds
@@ -314,6 +317,9 @@ debugInfo.storeInfo("relEntStep1Lower",relEntStep1Lower);
 
 % using the final point from FW
 [deltaVecLower,exitFlagStep2FixedLength,extraOut] = subProblemFunc(vecFWLower,gradFuncLower(vecFWLower));
+if exitFlagStep2FixedLength == SubProblemExitFlag.failed
+    error("Could not compute gap for step 2.")
+end
 gapLower = -FrankWolfe.inProdR(deltaVecLower,gradFuncLower(vecFWLower));
 relEntLowerBoundL = funcLower(vecFWLower) - abs(gapLower);
 
@@ -374,6 +380,9 @@ debugInfo.storeInfo("relEntStep1Upper",relEntStep1Upper);
 
 % using the final point from FW
 [deltaVecUpper,exitFlagStep2FixedLength,extraOut] = subProblemFunc(vecFWUpper,gradFuncUpper(vecFWUpper));
+if exitFlagStep2FixedLength == SubProblemExitFlag.failed
+    error("Could not find an initial Point for Frank Wolfe solver.")
+end
 gapUpper = -FrankWolfe.inProdR(deltaVecUpper,gradFuncUpper(vecFWUpper));
 relEntLowerBoundU = funcUpper(vecFWUpper) - abs(gapUpper);
 
@@ -402,32 +411,35 @@ if options.QESMode == true
     optimalLinPoint = QESFinderDecoy.perturbEigvalsChoi(optimalLinPoint,dimAPrimeB,false);
     
     % find gradient of QES at linearization point
-    [qesGrad,tolGrad] = QESFinderDecoy.getGradQESIntImperfect(optimalLinPoint,gradFuncLower(optimalLinPoint),...
-                params.stateTest,params.stateGen,dimAPrime,probTest,testCons,squashingConsTest,squashingConsGen,...
-                params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
-                params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
+    [qesGrad,tolGrad,exitFlag] = QESFinderDecoy.getGradQESIntImperfect(optimalLinPoint,gradFuncLower(optimalLinPoint),...
+        params.stateTest,params.stateGen,dimAPrime,probTest,testCons,squashingConsTest,squashingConsGen,...
+        params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
+        params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
+    if exitFlag == SubProblemExitFlag.failed
+        error("Could not get gradient for QES.")
+    end
     
     %Subproblem func equal for both cases
     subProblemFuncQes = @(vecQesFW,vecQesGrad) QESFinderDecoy.subproblemQesIntImperfect(vecQesFW,vecQesGrad,...
-                params.stateTest,params.stateGen,dimAPrime,testCons,squashingConsTest,squashingConsGen,...
-                params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining,...
-                params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
-    
+        params.stateTest,params.stateGen,dimAPrime,testCons,squashingConsTest,squashingConsGen,...
+        params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining,...
+        params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
+
     %Initial point for FW iteration
     vecQesInit = QESFinderDecoy.initPointIntImperfect(optimalLinPoint(1:end-1),params.stateTest,params.stateGen,...
-                dimAPrime,testCons,squashingConsTest,squashingConsGen,...
-                params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
-                params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
+        dimAPrime,testCons,squashingConsTest,squashingConsGen,...
+        params.probDistPhotonConMuTestLower, params.probDistPhotonConMuTestUpper, params.probRemaining, ...
+        params.probDecoyConTest,params.probSignalConTest,params.blockPhotonNum,options);
 
     %% Run FW for QES with lower bound on probability in generation rounds
 
     %Define functions for finding constant term in Qes (required for FW
     %algorithm)
     funcQesLower =   @(vecQesFW) QESFinderDecoy.funcFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons, ...
-                probTest,qesGrad,entropyAlpha,dimAPrime,params.probDecoyConTest,params.photonDistributionGenLower,perturbation,perturbationAff);
+        probTest,qesGrad,entropyAlpha,dimAPrime,params.probDecoyConTest,params.photonDistributionGenLower,perturbation,perturbationAff);
 
     gradFuncQesLower =  @(vecQesFW) QESFinderDecoy.gradFuncFW(vecQesFW,params.stateGen,params.keyProj,params.krausOps,testCons,...
-                probTest,qesGrad,entropyAlpha,dimAPrime,params.probDecoyConTest,params.photonDistributionGenLower,perturbation,perturbationAff);
+        probTest,qesGrad,entropyAlpha,dimAPrime,params.probDecoyConTest,params.photonDistributionGenLower,perturbation,perturbationAff);
     
     %Run FW solver
     switch options.frankWolfeMethod
@@ -469,6 +481,9 @@ if options.QESMode == true
     
     % Run one more FW to find reliable lower bound
     [deltaVecQesLower,exitFlagStep2Qes,extraOut] = subProblemFuncQes(vecQesLower,gradFuncQesLower(vecQesLower));
+    if exitFlagStep2Qes == SubProblemExitFlag.failed
+        error("Could not compute gap for QES step 2.")
+    end
     gapQes = -FrankWolfe.inProdR(deltaVecQesLower,gradFuncQesLower(vecQesLower));
     qesConstLowerBoundL = funcQesLower(vecQesLower) - abs(gapQes);
     % qesConstLowerBound = -1/(alphaHat-1)*log2(-(funcQes(vecQes) - abs(gapQes)));
@@ -528,6 +543,9 @@ if options.QESMode == true
     
     % Run one more FW to find reliable lower bound
     [deltaVecQesUpper,exitFlagStep2Qes,extraOut] = subProblemFuncQes(vecQesUpper,gradFuncQesUpper(vecQesUpper));
+    if exitFlagStep2Qes == SubProblemExitFlag.failed
+        error("Could not compute gap for QES step 2.")
+    end
     gapQes = -FrankWolfe.inProdR(deltaVecQesUpper,gradFuncQesUpper(vecQesUpper));
     qesConstLowerBoundU = funcQesUpper(vecQesUpper) - abs(gapQes);
     % qesConstLowerBound = -1/(alphaHat-1)*log2(-(funcQes(vecQes) - abs(gapQes)));
