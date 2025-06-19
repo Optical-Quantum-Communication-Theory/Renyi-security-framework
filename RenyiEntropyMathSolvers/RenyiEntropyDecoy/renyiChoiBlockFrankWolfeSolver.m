@@ -322,7 +322,7 @@ relEntLowerBound = func(vecFW) - abs(gap);
 
 % using the best lowerbound point from FW (currently we trust our func and
 % gradfunc enough to use the value output by FW directly)
-if output.lowerBoundFWVal > relEntLowerBound
+if options.verboseLevel >= 1 && output.lowerBoundFWVal > relEntLowerBound
     fprintf("!!A better point was found!!\nold %e, new %e\n",relEntLowerBound,output.lowerBoundFWVal)
 end
 relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
@@ -422,7 +422,7 @@ if options.QESMode == true
     % qesConstLowerBound = -1/(alphaHat-1)*log2(-(funcQes(vecQes) - abs(gapQes)));
     
     %Pick best lowerbound
-    if outputQes.lowerBoundFWVal > qesConstLowerBound
+    if options.verboseLevel >= 1 && outputQes.lowerBoundFWVal > qesConstLowerBound
         fprintf("!!A better QES constant was found!!\nold %e, new %e\n",qesConstLowerBound,outputQes.lowerBoundFWVal);
     end
     qesConstLowerBound = max(qesConstLowerBound,outputQes.lowerBoundFWVal);

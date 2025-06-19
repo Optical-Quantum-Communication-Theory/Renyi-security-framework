@@ -266,18 +266,21 @@ debugInfo.storeInfo("relEntStep1",relEntStep1);
 if exitFlag == SubProblemExitFlag.failed
     error("Could not compute gap for step 2.")
 end
-
 gap = -FrankWolfe.inProdR(deltaVec,gradFunc(vecFW));
 relEntLowerBound = func(vecFW) - abs(gap);
 
 % using the best lowerbound point from FW (currently we trust our func and
 % gradfunc enough to use the value output by FW directly)
-if output.lowerBoundFWVal > relEntLowerBound
+if options.verboseLevel >= 1 && output.lowerBoundFWVal > relEntLowerBound
     fprintf("!!A better point was found!!\nold %e, new %e\n",relEntLowerBound,output.lowerBoundFWVal)
 end
 relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
 
-% % testing the new step 2
+% %% testing the new step 2
+% % An experimental step 2 solver that uses the intersect of multiple
+% % linearizations for a better bound. We can revisit this idea at a later
+% % date.
+%
 % vecFWs = debugInfo.info.pointsQueue.toCell;%{vecFW;output.lowerBoundFWPoint};
 % vecGrads = cellfun(@(x) gradFunc(x), vecFWs,"UniformOutput",false);
 % constOffsets = cellfun(@(x,y) func(x)-FrankWolfe.inProdR(x,y),vecFWs,vecGrads);
@@ -287,9 +290,9 @@ relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
 % if testLowerBound > relEntLowerBound
 %     fprintf("!!A better point was found using new step 2!!\nold %e, new %e\n",relEntLowerBound,testLowerBound)
 % end
+% relEntLowerBound = max(relEntLowerBound,testLowerBound);
 
 %Store best lower bound
-relEntLowerBound = max(relEntLowerBound,output.lowerBoundFWVal);
 debugInfo.storeInfo("relEntLowerBound",relEntLowerBound);
 
 %% Find QES for variable length
@@ -357,7 +360,7 @@ if options.QESMode
     % qesConstLowerBound = -1/(alphaHat-1)*log2(-(funcQes(vecQes) - abs(gapQes)));
     
     %Pick best lowerbound
-    if outputQes.lowerBoundFWVal > qesConstLowerBound
+    if options.verboseLevel >= 1 && outputQes.lowerBoundFWVal > qesConstLowerBound
         fprintf("!!A better QES constant was found!!\nold %e, new %e\n",qesConstLowerBound,outputQes.lowerBoundFWVal);
     end
     qesConstLowerBound = max(qesConstLowerBound,outputQes.lowerBoundFWVal);
