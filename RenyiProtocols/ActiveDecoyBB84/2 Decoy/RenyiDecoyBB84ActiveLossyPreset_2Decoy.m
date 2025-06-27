@@ -122,4 +122,4 @@ mathSolverMod = QKDMathSolverModule(@renyiDecoyFrankWolfeSolver,mathSolverOption
 qkdInput.setMathSolverModule(mathSolverMod);
 
 %% global options
-qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","Mosek_5", "cvxPrecision", "high"));
+qkdInput.setGlobalOptions(struct("errorHandling",ErrorHandling.DontCatch,"verboseLevel",1,"cvxSolver","Mosek", "cvxPrecision", "high"));
