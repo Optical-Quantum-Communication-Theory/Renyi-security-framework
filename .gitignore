@@ -5,6 +5,7 @@
 *.png
 *.jpg
 *.eps
+*.pdf
 
 # Ignore log files
 *.log
