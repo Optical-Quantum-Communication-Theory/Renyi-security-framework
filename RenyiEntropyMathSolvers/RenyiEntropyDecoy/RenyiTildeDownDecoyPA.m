@@ -440,6 +440,9 @@ classdef RenyiTildeDownDecoyPA
             decoyConstraintsIntImperfect(cvx_problem, YieldMat, rhoCTestMat, rhoABTests,...
                 probDistPhotonConMuTestLower, probDistPhotonConMuTestUpper,probRemaining, probSignalConTest, testCons, blockPhotonNum, linConTol)
             
+            % rhoCTestMat is a probability distribution in each column
+            abs(sum(rhoCTestMat,1) - ones(1,numTestInt)) <= linConTol
+
             % Squashing constraints (apply only if they exist)
             if ~isempty(squashingConsTest) || ~isempty(squashingConsGen)
                 squashingConstraints(cvx_problem, rhoABTests, rhoABGens, ...
