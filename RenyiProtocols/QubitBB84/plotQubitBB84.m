@@ -35,6 +35,21 @@ keyRatesEURN8 = matEURN8(:,2);
 keyRatesEURN9 = matEURN9(:,2);
 keyRatesEURN10 = matEURN10(:,2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Results PS
+matPSN5 = readmatrix("PS Data/FiniteQubitBB84Adaptive_PS_1.00e+05.csv");
+matPSN6 = readmatrix("PS Data/FiniteQubitBB84Adaptive_PS_1.00e+06.csv"); 
+matPSN7 = readmatrix("PS Data/FiniteQubitBB84Adaptive_PS_1.00e+07.csv");
+matPSN8 = readmatrix("PS Data/FiniteQubitBB84Adaptive_PS_1.00e+08.csv");
+matPSN9 = readmatrix("PS Data/FiniteQubitBB84Adaptive_PS_1.00e+09.csv");
+matPSN10 = readmatrix("PS Data/FiniteQubitBB84Adaptive_PS_1.00e+10.csv");
+
+keyRatesPSN5 = matPSN5(:,2);
+keyRatesPSN6 = matPSN6(:,2);
+keyRatesPSN7 = matPSN7(:,2);
+keyRatesPSN8 = matPSN8(:,2);
+keyRatesPSN9 = matPSN9(:,2);
+keyRatesPSN10 = matPSN10(:,2);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Plot
 % Loss etc. for plotting
 tempeta = arrayfun(@(x) x.currentParams.transmittance, matN10.results);
@@ -59,6 +74,7 @@ colorList = ["#0072BD", "#D95319", "#EDB120", "#7E2F8E", "#77AC30", "#4DBEEE", "
 figure
 set(gcf,'position',[x0,y0,width,height])
 
+% Renyi rates
 % semilogy(etadB,keyRatesN4,"-o","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
 semilogy(etadB,keyRatesN5,"-o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
 
@@ -70,6 +86,7 @@ semilogy(etadB,keyRatesN8,"-o","Color",colorList(5),"DisplayName", sprintf("N = 
 semilogy(etadB,keyRatesN9,"-o","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(6))))
 semilogy(etadB,keyRatesN10,"-o","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(7))))
 
+% EUR rates (All 0 key rates commented out)
 semilogy(etadB,keyRatesEURN5,"--x","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(2))))
 semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(3))))
 semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(4))))
@@ -77,7 +94,16 @@ semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(5),"DisplayName", sprintf("
 semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(6))))
 semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(7))))
 
-lgd = legend('NumColumns',2);
+% PS rates (All 0 key rates commented out)
+% semilogy(etadB,keyRatesPSN5,"-.^","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(2))))
+semilogy(etadB,keyRatesPSN6,"-.^","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(3))))
+semilogy(etadB,keyRatesPSN7,"-.^","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(4))))
+semilogy(etadB,keyRatesPSN8,"-.^","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(5))))
+semilogy(etadB,keyRatesPSN9,"-.^","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(6))))
+semilogy(etadB,keyRatesPSN10,"-.^","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(7))))
+
+
+lgd = legend('NumColumns',3);
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
 xlabel('transmittance in dB',FontSize=14)
