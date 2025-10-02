@@ -36,7 +36,7 @@ for indexEps = 1:numel(epsilonInt_List)
         optvals = readmatrix(fileStrTemp);
     
         for indexLoss = 1:numel(transmittanceTemp)
-            fprintf("Iteration %.0f of %.0f for N=%.0e with eps_int=%.2e",indexLoss,...
+            fprintf("Iteration %.0f of %.0f for N=%.0e with eps_int=%.2e \n",indexLoss,...
                 numel(transmittanceTemp),N_list(indexSignals),epsilonInt_List(indexEps))
     
             %Add total signals sent from list above
