@@ -10,10 +10,10 @@ transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss ordered epsilon_int = 0, 1e-6, 1e-4, 1e-2
 %(named delta in description)
-lossList = [[7,16,21]; [6,16,21] ;[6,14,12]; [4,4,4]];
+lossList = [[7,16,21]; [6,15,21] ;[5,14,21]];
 
 % list of epsilon_int values
-epsilonInt_List = [0, 1e-6, 1e-4, 1e-2];
+epsilonInt_List = [0, 0.1, 0.25];
 
 %filestring for optimal values
 filestrOptVals = "optimalValues\optValsPassiveDecoyBB84_1_decoy_N=";
@@ -31,7 +31,7 @@ for indexEps = 1:numel(epsilonInt_List)
     
         %Load optimal values for current number of signal values
         fileStrTemp = filestrOptVals + sprintf("%.2e",N_list(indexSignals)) ...
-            + sprintf("_delta=%.2e",epsilonInt_List(indexEps)) +".csv";
+            + sprintf("_epsilonInt=%.2e",epsilonInt_List(indexEps)) +".csv";
         %optimal values are sorted in coulmns as | logRenyiAlpha| ...
         optvals = readmatrix(fileStrTemp);
     
@@ -48,14 +48,14 @@ for indexEps = 1:numel(epsilonInt_List)
             %Add Renyi param from optimal values
             % fixed alpha
             logAlpha = optvals(indexLoss,1);
-            qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
+            % qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
                       
-            % % optimize alpha
-            % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-5,-0.5);
-            % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
-            % logrenyiAlpha.upperBound = bndsLogAlpha(2);
-            % logrenyiAlpha.initVal = logAlpha;
-            % qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
+            % optimize alpha
+            bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-4,-0.8);
+            logrenyiAlpha.lowerBound = bndsLogAlpha(1);
+            logrenyiAlpha.upperBound = bndsLogAlpha(2);
+            logrenyiAlpha.initVal = logAlpha;
+            qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
 
             % run the QKDSolver with this input
             results(indexLoss) = MainIteration(qkdInput);
@@ -65,7 +65,7 @@ for indexEps = 1:numel(epsilonInt_List)
 
         %filestring for saving
         filestr = sprintf("data/RenyiDecoyBB84PassiveResults_%.2e",N_list(indexSignals)) + ...
-            sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + "_1decoy.mat";
+            sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + "_1decoy_new.mat";
 
         % save the results and preset to a file
         results = results(1:numel(transmittanceTemp));
