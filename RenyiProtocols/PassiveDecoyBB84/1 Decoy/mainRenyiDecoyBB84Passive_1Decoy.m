@@ -48,14 +48,14 @@ for indexEps = 1:numel(epsilonInt_List)
             %Add Renyi param from optimal values
             % fixed alpha
             logAlpha = optvals(indexLoss,1);
-            % qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
+            qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
                       
-            % optimize alpha
-            bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-4,-0.8);
-            logrenyiAlpha.lowerBound = bndsLogAlpha(1);
-            logrenyiAlpha.upperBound = bndsLogAlpha(2);
-            logrenyiAlpha.initVal = logAlpha;
-            qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
+            % % optimize alpha
+            % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-4,-0.8);
+            % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
+            % logrenyiAlpha.upperBound = bndsLogAlpha(2);
+            % logrenyiAlpha.initVal = logAlpha;
+            % qkdInput.addOptimizeParameter("logrenyiAlpha", logrenyiAlpha);
 
             % run the QKDSolver with this input
             results(indexLoss) = MainIteration(qkdInput);
