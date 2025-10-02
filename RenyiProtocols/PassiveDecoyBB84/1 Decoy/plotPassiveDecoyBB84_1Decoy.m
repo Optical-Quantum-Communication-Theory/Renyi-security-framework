@@ -3,57 +3,44 @@
 numLoss = 21;
 optVarNames = {'logRenyiAlpha'};
 
-%% delta = 0
+%% epsilonInt = 0
 %N=1e6
-matN6d0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=0.00e+00_1decoy.mat");
-[keyRatesN6d0,optvalsN6d0] = parseKeyRatesAndOptVals(matN6d0,numLoss,optVarNames);
+matN6_eps0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=0.00e+00_1decoy_new.mat");
+[keyRatesN6_eps0,optvalsN6_eps0] = parseKeyRatesAndOptVals(matN6_eps0,numLoss,optVarNames);
 
 %N=1e8
-matN8d0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=0.00e+00_1decoy.mat");
-[keyRatesN8d0,optvalsN8d0] = parseKeyRatesAndOptVals(matN8d0,numLoss,optVarNames);
+matN8_eps0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=0.00e+00_1decoy_new.mat");
+[keyRatesN8_eps0,optvalsN8_eps0] = parseKeyRatesAndOptVals(matN8_eps0,numLoss,optVarNames);
 
 %N=1e10
-matN10d0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=0.00e+00_1decoy.mat");
-[keyRatesN10d0,optvalsN10d0] = parseKeyRatesAndOptVals(matN10d0,numLoss,optVarNames);
+matN10_eps0 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=0.00e+00_1decoy_new.mat");
+[keyRatesN10_eps0,optvalsN10_eps0] = parseKeyRatesAndOptVals(matN10_eps0,numLoss,optVarNames);
 
-%% delta = 1e-6
-%N=1e6
-matN6d6 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-06_1decoy.mat");
-[keyRatesN6d6,optvalsN6d6] = parseKeyRatesAndOptVals(matN6d6,numLoss,optVarNames);
+%% epsilonInt = 10%
+matN6_eps10 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-01_1decoy_new.mat");
+[keyRatesN6_eps10, optvalsN6_eps10] = parseKeyRatesAndOptVals(matN6_eps10,numLoss,optVarNames);
 
-%N=1e8
-matN8d6 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-06_1decoy.mat");
-[keyRatesN8d6,optvalsN8d6] = parseKeyRatesAndOptVals(matN8d6,numLoss,optVarNames);
+matN8_eps10 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-01_1decoy_new.mat");
+[keyRatesN8_eps10, optvalsN8_eps10] = parseKeyRatesAndOptVals(matN8_eps10,numLoss,optVarNames);
 
-%N=1e10
-matN10d6 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-06_1decoy.mat");
-[keyRatesN10d6, optvalsN10d6] = parseKeyRatesAndOptVals(matN10d6,numLoss,optVarNames);
+matN10_eps10 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-01_1decoy_new.mat");
+[keyRatesN10_eps10, optvalsN10_eps10] = parseKeyRatesAndOptVals(matN10_eps10,numLoss,optVarNames);
 
-%% delta = 1e-4
-matN6d4 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-04_1decoy.mat");
-[keyRatesN6d4, optvalsN6d4] = parseKeyRatesAndOptVals(matN6d4,numLoss,optVarNames);
+%% delat = 25%
+matN6_eps25 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=2.50e-01_1decoy_new.mat");
+[keyRatesN6_eps25, optvalsN6_eps25] = parseKeyRatesAndOptVals(matN6_eps25,numLoss,optVarNames);
 
-matN8d4 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-04_1decoy.mat");
-[keyRatesN8d4, optvalsN8d4] = parseKeyRatesAndOptVals(matN8d4,numLoss,optVarNames);
+matN8_eps25 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=2.50e-01_1decoy_new.mat");
+[keyRatesN8_eps25,optvalsN8_eps25] = parseKeyRatesAndOptVals(matN8_eps25,numLoss,optVarNames);
 
-matN10d4 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-04_1decoy.mat");
-[keyRatesN10d4, optvalsN10d4] = parseKeyRatesAndOptVals(matN10d4,numLoss,optVarNames);
-
-%% delat = 1e-2
-matN6d2 = load("data/RenyiDecoyBB84PassiveResults_1.00e+06_epsInt=1.00e-02_1decoy.mat");
-[keyRatesN6d2, optvalsN6d2] = parseKeyRatesAndOptVals(matN6d2,numLoss,optVarNames);
-
-matN8d2 = load("data/RenyiDecoyBB84PassiveResults_1.00e+08_epsInt=1.00e-02_1decoy.mat");
-[keyRatesN8d2,optvalsN8d2] = parseKeyRatesAndOptVals(matN8d2,numLoss,optVarNames);
-
-matN10d2 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=1.00e-02_1decoy.mat");
-[keyRatesN10d2,optvalsN10d2] = parseKeyRatesAndOptVals(matN10d2,numLoss,optVarNames);
+matN10_eps25 = load("data/RenyiDecoyBB84PassiveResults_1.00e+10_epsInt=2.50e-01_1decoy_new.mat");
+[keyRatesN10_eps25,optvalsN10_eps25] = parseKeyRatesAndOptVals(matN10_eps25,numLoss,optVarNames);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Plot
 % Loss etc. for plotting
-tempeta = arrayfun(@(x) x.currentParams.transmittance, matN10d0.results);
-tempptest = arrayfun(@(x) x.currentParams.probTest, matN10d0.results);
+tempeta = arrayfun(@(x) x.currentParams.transmittance, matN10_eps0.results);
+tempptest = arrayfun(@(x) x.currentParams.probTest, matN10_eps0.results);
 
 eta = tempeta(1:end);
 etadB = -10*log10(eta);
@@ -76,27 +63,22 @@ colorList = ["#0072BD", "#D95319", "#77AC30"];
 figure
 set(gcf,'position',[x0,y0,width,height])
 
-%delta = 0, i.e. perfect
-semilogy(etadB,keyRatesN10d0,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
+%epsilonInt = 0, i.e. perfect
+semilogy(etadB,keyRatesN10_eps0,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
 
 hold on
-semilogy(etadB,keyRatesN8d0,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6d0,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN8_eps0,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_eps0,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
 
-%delta = 1e-6
-semilogy(etadB,keyRatesN10d6,"-p","Color",colorList(1),"Markersize",10,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8d6,"--s","Color",colorList(1),"Markersize",8, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6d6,"-.o","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+%epsilonInt = 10%
+semilogy(etadB,keyRatesN10_eps10,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN8_eps10,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_eps10,"-.o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
 
-%delta = 1e-4
-semilogy(etadB,keyRatesN10d4,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8d4,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6d4,"-.o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
-
-%delta = 1e-2
-semilogy(etadB,keyRatesN10d2,"-p","Color",colorList(3),"Markersize",10,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8d2,"--s","Color",colorList(3),"Markersize",8,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6d2,"-.o","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+%epsilonInt = 25%
+semilogy(etadB,keyRatesN10_eps25,"-p","Color",colorList(3),"Markersize",10,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN8_eps25,"--s","Color",colorList(3),"Markersize",8,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_eps25,"-.o","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
 
 lgd = legend('NumColumns',4);
 lgd.FontSize = 10;
@@ -105,7 +87,7 @@ xlabel('transmittance in dB',FontSize=14)
 ylabel('Secret key rate',FontSize=14)
 ylim([1*1e-6 5])
 
-titles = {'\epsilon_{int} = 0','\epsilon_{int} = 10^{-6}', '\epsilon_{int} = 10^{-4}', '\epsilon_{int} = 10^{-2}'};
+titles = {'\epsilon_{int} = 0','\epsilon_{int} = 10%', '\epsilon_{int} = 25%'};
 titles = sprintf('%-30s', titles{:});
 lgd.Title.String = titles;
 hold off
