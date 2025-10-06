@@ -98,17 +98,17 @@ semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(5),"DisplayName", sprintf("
 semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(6))))
 semilogy(etadB,keyRatesEURN11,"--x","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(7))))
 
-%PS (All 0 key rates commented out)
-% semilogy(etadB,zeros(1,26),"-.^","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(1))))
-% semilogy(etadB,zeros(1,26),"-.^","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(2))))
-% semilogy(etadB,zeros(1,26),"-.^","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(3))))
-% semilogy(etadB,zeros(1,26),"-.^","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(4))))
-semilogy(etadB,keyRatesPSN9,"-.^","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(5))))
-semilogy(etadB,keyRatesPSN10,"-.^","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(6))))
-semilogy(etadB,keyRatesPSN11,"-.^","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(7))))
+% %PS (All 0 key rates commented out)
+% % semilogy(etadB,zeros(1,26),"-.^","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(1))))
+% % semilogy(etadB,zeros(1,26),"-.^","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(2))))
+% % semilogy(etadB,zeros(1,26),"-.^","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(3))))
+% % semilogy(etadB,zeros(1,26),"-.^","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(4))))
+% semilogy(etadB,keyRatesPSN9,"-.^","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(5))))
+% semilogy(etadB,keyRatesPSN10,"-.^","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(6))))
+% semilogy(etadB,keyRatesPSN11,"-.^","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(7))))
 
 
-lgd = legend('NumColumns',3);
+lgd = legend('NumColumns',1);
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
 xlabel('transmittance in dB',FontSize=14)
