@@ -10,14 +10,13 @@ transmittance = 10.^(-lossdB/10);
 
 %list of maximal element of loss ordered epsilon_int = 0, 10%, 25%
 %(named delta in description)
-lossList = [[7,17,21]; [5,16,21] ;[4,13,21]];
+lossList = [[7,16,21]; [6,15,21] ;[4,13,17]];
 
 % list of epsilon_int values
 epsilonInt_List = [0, 0.1, 0.25];
 
 %filestring for optimal values
-filestrOptVals = "optimalValues\optValsPassiveDecoyBB84_N=";
-
+filestrOptVals = "optimalValues\optValsPassiveDecoyBB84_2_decoy_N=";
 
 for indexEps = 1:numel(epsilonInt_List)
     %pick preset (depends on deviation eps_int
@@ -37,7 +36,7 @@ for indexEps = 1:numel(epsilonInt_List)
         optvals = readmatrix(fileStrTemp);
     
         for indexLoss = 1:numel(transmittanceTemp)
-            fprintf("Iteration %.0f of %.0f for N=%.0e with eps_int=%.2e",indexLoss,...
+            fprintf("Iteration %.0f of %.0f for N=%.0e with eps_int=%.2e \n",indexLoss,...
                 numel(transmittanceTemp),N_list(indexSignals),epsilonInt_List(indexEps))
     
             %Add total signals sent from list above
@@ -52,7 +51,7 @@ for indexEps = 1:numel(epsilonInt_List)
             qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
             
             % optimize alpha
-            % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-4,-0.8);
+            % bndsLogAlpha = lowerUpperBnds_from_optvals(indexLoss,optvals(:,1),-4.5,-0.8);
             % logrenyiAlpha.lowerBound = bndsLogAlpha(1);
             % logrenyiAlpha.upperBound = bndsLogAlpha(2);
             % logrenyiAlpha.initVal = logAlpha;
@@ -66,11 +65,11 @@ for indexEps = 1:numel(epsilonInt_List)
 
         %filestring for saving
         filestr = sprintf("data/RenyiDecoyBB84PassiveResults_%.2e",N_list(indexSignals)) + ...
-            sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + "_new_tight2.mat";
+            sprintf("_epsInt=%.2e",epsilonInt_List(indexEps)) + ".mat";
 
         % save the results and preset to a file
         %save results
-        results = results(15:21);%results(1:numel(transmittanceTemp));
+        results = results(1:numel(transmittanceTemp));
         save(filestr,"results","qkdInput");
     end
 end
