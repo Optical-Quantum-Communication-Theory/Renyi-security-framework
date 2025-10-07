@@ -27,3 +27,6 @@
 # Packaged app and toolbox files
 *.mlappinstall
 *.mltbx
+
+# Ignore plot file used internally
+plotRenyiDecoyPassive.m
