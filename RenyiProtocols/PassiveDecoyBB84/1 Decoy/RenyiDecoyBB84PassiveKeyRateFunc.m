@@ -164,7 +164,7 @@ photonDistributionGenLower = 0;
 
 for index = 1:numel(params.probDecoyConGen)
     photonDistributionGenLower = photonDistributionGenLower + ...
-        params.probDecoyConGen(index)*poisson(params.decoys{index} - params.deltaDecoys{index},params.blockPhotonNum);
+        params.probDecoyConGen(index)*poisson(params.decoys{index},params.blockPhotonNum);
     photonDistributionGenUpper = photonDistributionGenUpper + ...
         params.probDecoyConGen(index)*poisson(params.decoys{index} + params.deltaDecoys{index},params.blockPhotonNum);
 end

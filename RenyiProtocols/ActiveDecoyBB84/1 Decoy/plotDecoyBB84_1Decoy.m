@@ -72,17 +72,17 @@ semilogy(etadB,keyRatesN9,"-o","Color",colorList(5),"DisplayName", sprintf("N = 
 semilogy(etadB,keyRatesN10,"-o","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(6))))
 semilogy(etadB,keyRatesN11,"-o","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(7))))
 
-%EUR
-semilogy(etadB,zeros(1,26),"--x","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(1))))
-semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(2))))
+%EUR (All 0 key rates commented out)
+% semilogy(etadB,zeros(1,26),"--x","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(1))))
+% semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(2))))
 semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(3))))
 semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(4))))
 semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(5))))
 semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(6))))
 semilogy(etadB,keyRatesEURN11,"--x","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(7))))
 
-lgd = legend('NumColumns',2);
-lgd.FontSize = 10;
+lgd = legend('NumColumns',1);
+lgd.FontSize = 9.5;
 lgd.Location = 'northeast';
 xlabel('transmittance in dB',FontSize=14)
 ylabel('Secret key rate',FontSize=14)

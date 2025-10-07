@@ -447,7 +447,7 @@ if options.QESMode == true
     
     %Pick best lowerbound
     if options.verboseLevel >= 1 && outputQesUpper.lowerBoundFWVal > qesConstLowerBoundU
-        fprintf("!!A better QES constant was found!!\nold %e, new %e\n",qesConstLowerBoundL,outputQesLower.lowerBoundFWVal);
+        fprintf("!!A better QES constant was found!!\nold %e, new %e\n",qesConstLowerBoundU,outputQesLower.lowerBoundFWVal);
     end
     qesConstLowerBoundU = max(qesConstLowerBoundU,outputQesUpper.lowerBoundFWVal);
     
