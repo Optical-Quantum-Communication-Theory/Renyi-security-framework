@@ -84,7 +84,7 @@ semilogy(etadB,keyRatesEURN11,"--x","Color",colorList(7),"DisplayName", sprintf(
 lgd = legend('NumColumns',1);
 lgd.FontSize = 9.5;
 lgd.Location = 'northeast';
-xlabel('transmittance in dB',FontSize=14)
+xlabel('Loss in dB',FontSize=14)
 ylabel('Secret key rate',FontSize=14)
 ylim([2*1e-6 1/exp(1)])
 xlim([0 45])

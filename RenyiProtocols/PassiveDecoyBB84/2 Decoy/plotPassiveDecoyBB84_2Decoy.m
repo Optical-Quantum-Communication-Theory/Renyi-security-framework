@@ -89,7 +89,7 @@ semilogy(etadB,keyRatesN6_eps25,"-.o","Color",colorList(3),"DisplayName", sprint
 lgd = legend('NumColumns',4);
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
-xlabel('transmittance in dB',FontSize=14)
+xlabel('Loss in dB',FontSize=14)
 ylabel('Secret key rate',FontSize=14)
 ylim([1*1e-6 5])
 
@@ -100,7 +100,7 @@ hold off
 
 %save figure
 f1=gca;
-filestr1 = "PassiveDecoyBB84.pdf";
+filestr1 = "PassiveDecoyBB84_2Decoy.pdf";
 % exportgraphics(f1,filestr1,'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

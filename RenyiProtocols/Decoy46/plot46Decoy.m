@@ -94,7 +94,7 @@ semilogy(etadB,keyRatesN6_q099,"-.o","Color",colorList(2),"DisplayName", sprintf
 lgd = legend('NumColumns',3);
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
-xlabel('transmittance in dB',FontSize=14)
+xlabel('Loss in dB',FontSize=14)
 ylabel('Secret key rate',FontSize=14)
 ylim([1*1e-6 2])
 
