@@ -153,6 +153,9 @@ classdef QESFinderChoiBlock
             blockConstraints(cvx_problem, rhoCTestMat, rhoABTests,...
                     probBlockConTest, probSignalConTestAndBlock, probRemaining, testCons,...
                     epsilonProb, epsilonBlock, linConTol);
+
+            % rhoCTestMat is a probability distribution
+            abs(sum(rhoCTestMat,1) - 1) <= linConTol;
             
             % Squashing constraints (apply only if they exist)
             if ~isempty(squashingConsTest) || ~isempty(squashingConsGen)
@@ -469,6 +472,9 @@ classdef QESFinderChoiBlock
             blockConstraints(cvx_problem, rhoCTestMat, rhoABTests,...
                     probBlockConTest, probSignalConTestAndBlock, probRemaining, testCons, ...
                     epsilonProb, epsilonBlock, linConTol);
+
+            % rhoCTestMat is a probability distribution
+            abs(sum(rhoCTestMat,1) - 1) <= linConTol;
             
             % Squashing constraints (apply only if they exist)
             if ~isempty(squashingConsTest) || ~isempty(squashingConsGen)
@@ -614,6 +620,9 @@ classdef QESFinderChoiBlock
             blockConstraints(cvx_problem, rhoCTestMat, rhoABTests,...
                     probBlockConTest, probSignalConTestAndBlock, probRemaining, testCons,...
                     epsilonProb, epsilonBlock, linConTol);
+
+            % rhoCTestMat is a probability distribution
+            abs(sum(rhoCTestMat,1) - 1) <= linConTol;
             
             % Squashing constraints (apply only if they exist)
             if ~isempty(squashingConsTest) || ~isempty(squashingConsGen)

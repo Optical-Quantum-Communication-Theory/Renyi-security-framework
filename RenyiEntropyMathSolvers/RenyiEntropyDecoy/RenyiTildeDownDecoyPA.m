@@ -228,6 +228,9 @@ classdef RenyiTildeDownDecoyPA
             % Decoy constraints
             decoyConstraints(cvx_problem, YieldMat, rhoCTestMat, rhoABTests,...
                 probDistPhotonConMuTest, probSignalConTest, testCons, blockPhotonNum, linConTol)
+
+            % rhoCTestMat is a probability distribution in each column
+            abs(sum(rhoCTestMat,1) - ones(1,numTestInt)) <= linConTol;
             
             % Squashing constraints (apply only if they exist)
             if ~isempty(squashingConsTest) || ~isempty(squashingConsGen)
@@ -441,7 +444,7 @@ classdef RenyiTildeDownDecoyPA
                 probDistPhotonConMuTestLower, probDistPhotonConMuTestUpper,probRemaining, probSignalConTest, testCons, blockPhotonNum, linConTol)
             
             % rhoCTestMat is a probability distribution in each column
-            abs(sum(rhoCTestMat,1) - ones(1,numTestInt)) <= linConTol
+            abs(sum(rhoCTestMat,1) - ones(1,numTestInt)) <= linConTol;
 
             % Squashing constraints (apply only if they exist)
             if ~isempty(squashingConsTest) || ~isempty(squashingConsGen)
