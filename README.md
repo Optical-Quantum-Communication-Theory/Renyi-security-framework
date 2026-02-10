@@ -20,9 +20,12 @@ Figure 4 until Figure 6 require MOSEK 10.0.44 (or above). For instalation instru
 > [!CAUTION]
 > This repository is for archival and transparency purposes; we do not guarantee compatibility with other versions of the Open QKD Security package beyond the ones listed above.
 
+> [!WARNING]
+> Mosek is the only solver for CVX that natively supports exponential cones. All other solvers use a series of approximations that can give unpredictable behaviour. We **Strongly** recommend using Mosek.
+
 ### As zip
 1. Download the linked version of the code from above and follow all [installation instructions](https://github.com/Optical-Quantum-Communication-Theory/openQKDsecurity/tree/016911bfe68cd9efb65864b09bd0af0cf3f57c28).
-2. Also follow the additional Mosek install instructions if you want an exact match. (We STRONGLY recomend it)
+2. Also follow the additional Mosek install instructions if you want an exact match.
 3. Download the latest release on the side bar and unzip in your preferred directory and add this folder to the Matlab path.
 
 
