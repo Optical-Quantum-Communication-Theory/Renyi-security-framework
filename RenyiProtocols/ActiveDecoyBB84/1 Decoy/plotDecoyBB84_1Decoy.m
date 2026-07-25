@@ -62,27 +62,31 @@ figure
 set(gcf,'position',[x0,y0,width,height])
 
 %GREAT
-semilogy(etadB,keyRatesN5,"-o","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN11,"-o","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(7))))
 
 hold on
-semilogy(etadB,keyRatesN6,"-o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN7,"-o","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8,"-o","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(4))))
-semilogy(etadB,keyRatesN9,"-o","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(5))))
-semilogy(etadB,keyRatesN10,"-o","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(6))))
-semilogy(etadB,keyRatesN11,"-o","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(7))))
+
+semilogy(etadB,keyRatesN10,"-o","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(6))))
+semilogy(etadB,keyRatesN9,"-o","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(5))))
+semilogy(etadB,keyRatesN8,"-o","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(4))))
+semilogy(etadB,keyRatesN7,"-o","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN6,"-o","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN5,"-o","Color",colorList(1),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
+
 
 %EUR (All 0 key rates commented out)
-% semilogy(etadB,zeros(1,26),"--x","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(1))))
-% semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(2))))
-semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(3))))
-semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(4))))
-semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(5))))
-semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(6))))
-semilogy(etadB,keyRatesEURN11,"--x","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(7))))
+semilogy(etadB,keyRatesEURN11,"--x","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(7))))
+semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(6))))
+semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(5))))
+semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))))
+semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(3))))
+% semilogy(etadB,zeros(1,26),"--x","Color",colorList(1),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(1))))
+% semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(2))))
+plot(nan,nan,'LineStyle', 'none',DisplayName='');
+plot(nan,nan,'LineStyle', 'none',DisplayName='');
 
-lgd = legend('NumColumns',1);
-lgd.FontSize = 9.5;
+lgd = legend('NumColumns',2);
+lgd.FontSize = 10;
 lgd.Location = 'northeast';
 xlabel('Loss in dB',FontSize=14)
 ylabel('Secret key rate',FontSize=14)
@@ -92,8 +96,9 @@ hold off
 
 %save figure
 f1=gca;
-filestr1 = "ActiveDecoyBB84_1Decoy.pdf";
-% exportgraphics(f1,filestr1,'ContentType','vector')
+filestr1 = "ActiveDecoyBB84_1Decoy";
+exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function rates = parseKeyRates(data,numElmts)
