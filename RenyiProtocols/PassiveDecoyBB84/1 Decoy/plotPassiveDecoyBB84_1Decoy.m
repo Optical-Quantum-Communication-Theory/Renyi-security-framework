@@ -70,21 +70,21 @@ figure
 set(gcf,'position',[x0,y0,width,height])
 
 %epsilonInt = 0, i.e. perfect
-semilogy(etadB,keyRatesN10_eps0,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN10_eps0,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
 
 hold on
-semilogy(etadB,keyRatesN8_eps0,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_eps0,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN8_eps0,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_eps0,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
 
 %epsilonInt = 10%
-semilogy(etadB,keyRatesN10_eps10,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8_eps10,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_eps10,"-.o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10_eps10,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN8_eps10,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_eps10,"-.o","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
 
 %epsilonInt = 25%
-semilogy(etadB,keyRatesN10_eps25,"-p","Color",colorList(3),"Markersize",10,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8_eps25,"--s","Color",colorList(3),"Markersize",8,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_eps25,"-.o","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10_eps25,"-p","Color",colorList(3),"Markersize",10,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN8_eps25,"--s","Color",colorList(3),"Markersize",8,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_eps25,"-.o","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
 
 lgd = legend('NumColumns',4);
 lgd.FontSize = 10;
