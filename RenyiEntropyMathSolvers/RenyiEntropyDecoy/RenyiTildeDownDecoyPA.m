@@ -227,7 +227,7 @@ classdef RenyiTildeDownDecoyPA
 
             % Decoy constraints
             decoyConstraints(cvx_problem, YieldMat, rhoCTestMat, rhoABTests,...
-                probDistPhotonConMuTest, probSignalConTest, testCons, blockPhotonNum, linConTol)
+                probDistPhotonConMuTest, probSignalConTest, testCons, blockPhotonNum, linConTol);
 
             % rhoCTestMat is a probability distribution in each column
             abs(sum(rhoCTestMat,1) - ones(1,numTestInt)) <= linConTol;
@@ -441,7 +441,7 @@ classdef RenyiTildeDownDecoyPA
 
             % Decoy constraints
             decoyConstraintsIntImperfect(cvx_problem, YieldMat, rhoCTestMat, rhoABTests,...
-                probDistPhotonConMuTestLower, probDistPhotonConMuTestUpper,probRemaining, probSignalConTest, testCons, blockPhotonNum, linConTol)
+                probDistPhotonConMuTestLower, probDistPhotonConMuTestUpper,probRemaining, probSignalConTest, testCons, blockPhotonNum, linConTol);
             
             % rhoCTestMat is a probability distribution in each column
             abs(sum(rhoCTestMat,1) - ones(1,numTestInt)) <= linConTol;
