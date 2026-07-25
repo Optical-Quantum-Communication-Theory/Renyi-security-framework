@@ -312,7 +312,7 @@ function [squashingOpsTest,squashingOpsGen,lowerBndSubspaceTest,lowerBndSubspace
     numPovmGen = numel(POVMAGen);
     numPovmTest = numel(POVMATest);
     
-    %we iterate over all subspace with <= NB photons, i.e. n = (0,1),
+    %we iterate over all subspace with <= NB photons, i.e. n = (0), n = (0,1),
     %n = (0,1,2), n = (0,1,2,3), ...
     for indexn = 1:NB
         %calculate dimension of current subspace <= indexn
@@ -340,6 +340,7 @@ function [squashingOpsTest,squashingOpsGen,lowerBndSubspaceTest,lowerBndSubspace
             upperBndSubspaceGen((indexn-1)*numPovmGen+indexA) = probSignalConGen(indexA);
         end
         
+        %iterate over Alice's POVM elements in test rounds
         for indexA = 1:numPovmTest
             %Define joint operator for squashing
             squashingOpsTest{(indexn-1)*numPovmTest+indexA} = kron(POVMATest{indexA},BobSquashingOp);
