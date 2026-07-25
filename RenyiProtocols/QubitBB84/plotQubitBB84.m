@@ -75,35 +75,37 @@ figure
 set(gcf,'position',[x0,y0,width,height])
 
 % Renyi rates
-% semilogy(etadB,keyRatesN4,"-o","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
-semilogy(etadB,keyRatesN5,"-o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
+% semilogy(etadB,keyRatesN4,"-o","Color",colorList(1),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10,"-o","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(7))))
 
 hold on
 
-semilogy(etadB,keyRatesN6,"-o","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN7,"-o","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(4))))
-semilogy(etadB,keyRatesN8,"-o","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(5))))
-semilogy(etadB,keyRatesN9,"-o","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(6))))
-semilogy(etadB,keyRatesN10,"-o","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(7))))
+semilogy(etadB,keyRatesN9,"-o","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(6))))
+semilogy(etadB,keyRatesN8,"-o","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(5))))
+semilogy(etadB,keyRatesN7,"-o","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(4))))
+semilogy(etadB,keyRatesN6,"-o","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN5,"-o","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
+
 
 % EUR rates (All 0 key rates commented out)
-semilogy(etadB,keyRatesEURN5,"--x","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(2))))
-semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(3))))
-semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(4))))
-semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(5))))
-semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(6))))
-semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (EUR)",log10(Nlist(7))))
+semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(7))))
+semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(6))))
+semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(5))))
+semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))))
+semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(3))))
+semilogy(etadB,keyRatesEURN5,"--x","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(2))))
+
 
 % PS rates (All 0 key rates commented out)
-% semilogy(etadB,keyRatesPSN5,"-.^","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(2))))
-semilogy(etadB,keyRatesPSN6,"-.^","Color",colorList(3),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(3))))
-semilogy(etadB,keyRatesPSN7,"-.^","Color",colorList(4),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(4))))
-semilogy(etadB,keyRatesPSN8,"-.^","Color",colorList(5),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(5))))
-semilogy(etadB,keyRatesPSN9,"-.^","Color",colorList(6),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(6))))
-semilogy(etadB,keyRatesPSN10,"-.^","Color",colorList(7),"DisplayName", sprintf("N = 10^{%.0f} (PS)",log10(Nlist(7))))
+% semilogy(etadB,keyRatesPSN10,"-.^","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(7))))
+% semilogy(etadB,keyRatesPSN9,"-.^","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(6))))
+% semilogy(etadB,keyRatesPSN8,"-.^","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(5))))
+% semilogy(etadB,keyRatesPSN7,"-.^","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(4))))
+% semilogy(etadB,keyRatesPSN6,"-.^","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(3))))
+% semilogy(etadB,keyRatesPSN5,"-.^","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(2))))
 
 
-lgd = legend('NumColumns',3);
+lgd = legend('NumColumns',2);
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
 xlabel('Loss in dB',FontSize=14)
@@ -113,8 +115,63 @@ hold off
 
 %save figure
 f1=gca;
-filestr1 = "QubitBB84Depol.pdf";
-% exportgraphics(f1,filestr1,'ContentType','vector')
+filestr1 = "QubitBB84Depol";
+% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define distinct colors for each method
+methodColors = lines(3); 
+cRenyi = methodColors(1,:); % Color 1 for Standard/Renyi
+cEUR   = methodColors(2,:); % Color 2 for EUR
+cPS    = methodColors(3,:); % Color 3 for PS
+
+figure
+set(gcf,'position',[x0,y0,width,height])
+
+% --- Renyi rates (Method 1: Solid Line, Circle Marker) ---
+semilogy(etadB,keyRatesN4,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
+% semilogy(etadB,keyRatesN5,"-^","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
+hold on
+% semilogy(etadB,keyRatesN6,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
+% semilogy(etadB,keyRatesN7,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(4))))
+% semilogy(etadB,keyRatesN8,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(5))))
+% semilogy(etadB,keyRatesN9,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(6))))
+semilogy(etadB,keyRatesN9,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(7))))
+
+
+% --- EUR rates (Method 2: Dashed Line, Cross Marker) ---
+semilogy(etadB,keyRatesEURN5,"--^","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(2))))
+% semilogy(etadB,keyRatesEURN6,"--x","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(3))))
+% semilogy(etadB,keyRatesEURN7,"--x","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))))
+% semilogy(etadB,keyRatesEURN8,"--x","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(5))))
+% semilogy(etadB,keyRatesEURN9,"--x","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(6))))
+semilogy(etadB,keyRatesEURN9,"--o","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(7))))
+
+
+% --- PS rates (Method 3: Dot-Dash Line, Triangle Marker) ---
+% semilogy(etadB,keyRatesPSN5,"-.^","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(2))))
+semilogy(etadB,keyRatesPSN6,"-.^","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(3))))
+% semilogy(etadB,keyRatesPSN7,"-.^","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(4))))
+% semilogy(etadB,keyRatesPSN8,"-.^","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(5))))
+% semilogy(etadB,keyRatesPSN9,"-.^","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(6))))
+semilogy(etadB,keyRatesPSN9,"-.o","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(7))))
+
+% Formatting
+lgd = legend('NumColumns',3);
+lgd.FontSize = 10;
+lgd.Location = 'northeast';
+xlabel('Loss in dB',FontSize=14)
+ylabel('Secret Key Rate',FontSize=14)
+ylim([1/2*1e-6 1])
+
+hold off
+
+% Save figure
+f1=gca;
+filestr1 = "QubitBB84Depol_Comparison.pdf";
+exportgraphics(f1,filestr1,'ContentType','vector')
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function rates = parseKeyRates(data,numElmts)

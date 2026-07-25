@@ -100,8 +100,10 @@ hold off
 
 %save figure
 f1=gca;
-filestr1 = "PassiveDecoyBB84_2Decoy.pdf";
-% exportgraphics(f1,filestr1,'ContentType','vector')
+filestr1 = "PassiveDecoyBB84_2Decoy";
+% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [rates,optValsTable] = parseKeyRatesAndOptVals(data,numElmts,optValNames)
