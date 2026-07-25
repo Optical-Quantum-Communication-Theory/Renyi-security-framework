@@ -74,22 +74,22 @@ figure
 set(gcf,'position',[x0,y0,width,height])
 
 %PS with q=1
-semilogy(etadB,keyRatesN14PS,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(5))))
+semilogy(etadB,keyRatesN14PS,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(5))))
 
 hold on
-semilogy(etadB,keyRatesN12PS,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(4))))
-semilogy(etadB,keyRatesN10PS,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-% semilogy(etadB,keyRatesN8PS,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN12PS,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(4))))
+semilogy(etadB,keyRatesN10PS,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(3))))
+% semilogy(etadB,keyRatesN8PS,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(2))))
 
 %GREAT q=1
-semilogy(etadB,keyRatesN10_q1,"-p","Color",colorList(1),"Markersize",10,"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8_q1,"--s","Color",colorList(1),"Markersize",8, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_q1,"-.o","Color",colorList(1),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10_q1,"-p","Color",colorList(1),"Markersize",10,"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN8_q1,"--s","Color",colorList(1),"Markersize",8, "DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_q1,"-.o","Color",colorList(1),"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(1))))
 
 %GREAT q=0.99
-semilogy(etadB,keyRatesN10_q099,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8_q099,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_q099,"-.o","Color",colorList(2),"DisplayName", sprintf("N = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10_q099,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(3))))
+semilogy(etadB,keyRatesN8_q099,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(2))))
+semilogy(etadB,keyRatesN6_q099,"-.o","Color",colorList(2),"DisplayName", sprintf("n =  10^{%.0f}",log10(Nlist(1))))
 
 lgd = legend('NumColumns',3);
 lgd.FontSize = 10;
@@ -105,8 +105,9 @@ hold off
 
 %save figure
 f1=gca;
-filestr1 = "Decoy46.pdf";
-% exportgraphics(f1,filestr1,'ContentType','vector')
+filestr1 = "Decoy46";
+% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [rates,optValsTable] = parseKeyRatesAndOptVals(data,numElmts,optValNames)
