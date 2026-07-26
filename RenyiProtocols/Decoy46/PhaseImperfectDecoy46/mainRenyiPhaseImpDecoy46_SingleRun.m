@@ -1,5 +1,28 @@
+numSigs = 1e8;
+
+%filestring for optimal values
+filestrOptVals = "optValsDecoy46_N=" + sprintf("%.2e",numSigs) +"_q=9.90e-01.csv";
+
+%optimal values are sorted in coulmns as | logRenyiAlpha | ...
+optvals = readmatrix(filestrOptVals);
+
 %pick preset
 qkdInput = RenyiPhaseImpDecoy46LossyPreset();
+
+%Number of signals sent
+qkdInput.addFixedParameter("Ntot", numSigs);
+
+%loss
+%total array of loss values to iterate over
+lossdB = linspace(0,40,21);
+transmittance = 10.^(-lossdB/10);
+indexLoss = 1;
+qkdInput.addFixedParameter("transmittance", transmittance(indexLoss));
+
+%Renyi param
+%fixed alpha
+logAlpha = optvals(indexLoss,1);
+qkdInput.addFixedParameter("logrenyiAlpha", logAlpha);
 
 %run the QKDSolver with this input and store results
 results = MainIteration(qkdInput);
