@@ -180,7 +180,8 @@ mathSolverInput.blockPhotonNum = params.blockPhotonNum;
 mathSolverInput.probTest = params.probTest;
 
 %total probability of all blocks in test rounds
-pTotTest = sum(params.probBlockCondTest,2);
+probSignalAndBlockConTest = repmat(params.probBlockCondTest,...
+    numel(params.probSignalConTest),1).*params.probSignalConTestAndBlock;
 
 %corrections due to phase imperfections
 mathSolverInput.continuityBnd = continuityBnd;
@@ -195,7 +196,8 @@ for indexA = 1:numObsAlice
     for indexB = 1:numObsBob
         testConstraints(indexA, indexB) = EqualityConstraintChoiBlock(params.observablesJointTest(indexA,indexB,:),...
             expectationsJointTestConDecoy(indexA,indexB));
-        probRemaining(indexA,indexB) = params.probSignalConTest(indexA)*(1-pTotTest); 
+        pTotALower = sum(probSignalAndBlockConTest(indexA,:) - params.probSignalConTest(indexA)*params.epsilonProbTest, 2);
+        probRemaining(indexA,indexB) = params.probSignalConTest(indexA)- pTotALower; 
     end
 end
 mathSolverInput.testConstraints = testConstraints(:);
