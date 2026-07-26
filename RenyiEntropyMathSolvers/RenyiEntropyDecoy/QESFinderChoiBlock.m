@@ -751,8 +751,8 @@ function blockConstraints(cvx_problem, rhoCTestMat, rhoABTests, probBlockConTest
     epsilonProbSum = blockCutoff*epsilonProb;
     
     % equivalent to 0 <= rhoCTestMat_{a,b} - sum_k p(k) Tr[Gamma_{a,b} xi_{t,k}(J_k)] <= ones(numObs,1)*(1-pTot);
-    (obsMatBlock - epsilonBlockMat)*probBlockConTestLower - 2*epsilonProbSum - linConTol <= rhoCTestMat                ;
-    (obsMatBlock + epsilonBlockMat)*probBlockConTestUpper + 2*epsilonProbSum + linConTol >= rhoCTestMat - probRemaining;
+    (obsMatBlock - epsilonBlockMat)*probBlockConTestLower - 2*epsilonProbSum <= rhoCTestMat + linConTol                ;
+    (obsMatBlock + epsilonBlockMat)*probBlockConTestUpper + 2*epsilonProbSum >= rhoCTestMat - probRemaining - linConTol;
     
     %sum_b Y_n(a,b) = p(a|test,n)
     obsBlockTensor = reshape(obsMatBlock,numSignalsAlice,[],blockCutoff);
