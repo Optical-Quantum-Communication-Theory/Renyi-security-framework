@@ -10,6 +10,10 @@ matN10 = load("data/RenyiBB84LossyResults_1.00e+10_depol.mat");
 %number of loss values used
 numLoss = 26;
 
+% depolarization
+depol = matN10.qkdInput.fixedParameters.depolarization;
+fEC = matN10.qkdInput.fixedParameters.fEC;
+
 %key rates
 keyRatesN4 = parseKeyRates(matN4,numLoss);
 keyRatesN5 = parseKeyRates(matN5,numLoss);
@@ -58,7 +62,7 @@ tempptest = arrayfun(@(x) x.currentParams.probTest, matN10.results);
 eta = tempeta(1:end);
 etadB = -10*log10(eta);
 
-etaAsymp = 10.^(-linspace(0,max(etadB,[],"all"),100));
+etaAsymp = 10.^(-linspace(0,max(etadB,[],"all")/10,100));
 etaAsympdB = -10*log10(etaAsymp);
 
 %List of total signals sent
@@ -67,57 +71,59 @@ Nlist = 10.^(4:1:10);
 %Color list
 colorList = ["#0072BD", "#D95319", "#EDB120", "#7E2F8E", "#77AC30", "#4DBEEE", "#A2142F"];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Asymptotic rate
+Rasymp = asymptotic_qubit_bb84(0, fEC, depol, etaAsymp);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Options for plots 
 [x0,y0,width,height] = deal(50,100,600,500);
-
-
 figure
 set(gcf,'position',[x0,y0,width,height])
 
 % Renyi rates
-% semilogy(etadB,keyRatesN4,"-o","Color",colorList(1),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
-semilogy(etadB,keyRatesN10,"-o","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(7))))
-
+h_std(1) = semilogy(etadB,keyRatesN10,"-o","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(7))));
 hold on
-
-semilogy(etadB,keyRatesN9,"-o","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(6))))
-semilogy(etadB,keyRatesN8,"-o","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(5))))
-semilogy(etadB,keyRatesN7,"-o","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(4))))
-semilogy(etadB,keyRatesN6,"-o","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN5,"-o","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
-
+h_std(2) = semilogy(etadB,keyRatesN9,"-o","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(6))));
+h_std(3) = semilogy(etadB,keyRatesN8,"-o","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(5))));
+h_std(4) = semilogy(etadB,keyRatesN7,"-o","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(4))));
+h_std(5) = semilogy(etadB,keyRatesN6,"-o","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))));
+h_std(6) = semilogy(etadB,keyRatesN5,"-o","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))));
 
 % EUR rates (All 0 key rates commented out)
-semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(7))))
-semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(6))))
-semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(5))))
-semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))))
-semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(3))))
-semilogy(etadB,keyRatesEURN5,"--x","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(2))))
+h_eur(1) = semilogy(etadB,keyRatesEURN10,"--x","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(7))));
+h_eur(2) = semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(6))));
+h_eur(3) = semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(5))));
+h_eur(4) = semilogy(etadB,keyRatesEURN7,"--x","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))));
+h_eur(5) = semilogy(etadB,keyRatesEURN6,"--x","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(3))));
+h_eur(6) = semilogy(etadB,keyRatesEURN5,"--x","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(2))));
 
+%Asymptotic rate
+h_asymp = semilogy(etaAsympdB,Rasymp,"--","Color","black","DisplayName", "Asymptotic" );
 
-% PS rates (All 0 key rates commented out)
-% semilogy(etadB,keyRatesPSN10,"-.^","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(7))))
-% semilogy(etadB,keyRatesPSN9,"-.^","Color",colorList(6),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(6))))
-% semilogy(etadB,keyRatesPSN8,"-.^","Color",colorList(5),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(5))))
-% semilogy(etadB,keyRatesPSN7,"-.^","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(4))))
-% semilogy(etadB,keyRatesPSN6,"-.^","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(3))))
-% semilogy(etadB,keyRatesPSN5,"-.^","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(2))))
+h_dummy = plot(NaN, NaN, 'Color', 'none', 'DisplayName', '');
 
+col1_handles = [h_std, h_dummy]; 
+col2_handles = [h_eur, h_asymp];            
 
-lgd = legend('NumColumns',2);
+ordered_handles = [col1_handles, col2_handles];
+lgd = legend(ordered_handles, 'NumColumns', 2, 'Interpreter', 'tex');
+
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
-xlabel('Loss in dB',FontSize=14)
-ylabel('Secret key rate',FontSize=14)
+lgd.Color = [1, 1, 1, 0.85];       
+lgd.EdgeColor = [0.7, 0.7, 0.7];
+lgd.ItemTokenSize = [27, 18];
+
+xlabel('Loss in dB', 'FontSize', 14)
+ylabel('Secret key rate', 'FontSize', 14)
 ylim([1/2*1e-6 1])
 hold off
 
 %save figure
 f1=gca;
 filestr1 = "QubitBB84Depol";
-% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
-% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Define distinct colors for each method
