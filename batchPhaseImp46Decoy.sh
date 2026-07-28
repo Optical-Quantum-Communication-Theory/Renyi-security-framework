@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# If you need to run this in the background and logout, use the following:
+#
+# nohup ./batchPhaseImp46Decoy.sh >batch.out 2>&1 </dev/null &
+# disown
+# exit
+
+# set -vx
+
 # manually add your path if you're on Windows (don't forget escape character on \, \\)
 START_DIR=$(pwd)
 RESOURCE_DIR=$START_DIR
@@ -25,7 +33,7 @@ echo
 # replaces {JOB_IND}.
 seq 1 "$TOTAL_JOBS" | xargs -P "$TOTAL_PARALLEL_JOBS" -I {JOB_IND} bash -c "
     echo \"starting Job: {JOB_IND}\"
-    
+
     # You may have to remove '-nojvm' if you encounter esoteric error messages.
     matlab -noFigureWindows -singleCompThread -sd \"${START_DIR}\" \
         -batch \"addpath(genpath('${RESOURCE_DIR}')); \
