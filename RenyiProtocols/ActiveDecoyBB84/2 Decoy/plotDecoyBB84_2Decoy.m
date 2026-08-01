@@ -65,13 +65,14 @@ keyRatesPSN11 =  matPSN11(:,2);
 %% Plot
 % Loss etc. for plotting
 lossdB = linspace(0,50,numLoss);
+tempetaAsymp = 10.^(-lossdB(1:22)/10);
 tempeta = 10.^(-lossdB/10);
 % logAlpha = arrayfun(@(x) x.currentParams.logrenyiAlpha, matN11.results);
 
 eta = tempeta(1:end);
 etadB = -10*log10(eta).';
 
-etaAsymp = 10.^(-linspace(0,max(etadB,[],"all"),100));
+etaAsymp = 10.^(-linspace(0,max(etadB,[],"all"),100)/10);
 etaAsympdB = -10*log10(etaAsymp);
 
 %List of total signals sent
@@ -80,6 +81,24 @@ Nlist = 10.^(5:1:11);
 %Color list
 colorList = ["#0072BD", "#D95319", "#EDB120", "#7E2F8E", "#77AC30", "#4DBEEE", "#A2142F"];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Asymptotic key rates
+fEC = matN11.qkdInput.fixedParameters.fEC;
+theta = matN11.qkdInput.fixedParameters.misalignmentAngle;
+
+resultsN11 = matN11.results;
+tempMusigopt = arrayfun(@(x) x.currentParams.GROUP_decoys_1, resultsN11);
+tempPtest = arrayfun(@(x) x.currentParams.probTest, resultsN11);
+
+popt_musig = polyfit(tempetaAsymp,tempMusigopt(1:22),2);
+musigopt = polyval(popt_musig,etaAsymp);
+popt_pTest = polyfit(tempetaAsymp,tempPtest(1:22),2);
+pTestopt = polyval(popt_pTest,etaAsymp);
+
+for index=1: length(etaAsymp)
+    keyRatesAsymp(index) = asymptotic_decoy_BB84(0,musigopt(index),etaAsymp(index), theta, fEC);
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %Options for plots 
 [x0,y0,width,height] = deal(50,100,600,500);
 
@@ -108,7 +127,10 @@ rEUR(3) = semilogy(etadB,keyRatesEURN9,"--x","Color",colorList(5),"DisplayName",
 rEUR(4) = semilogy(etadB,keyRatesEURN8,"--x","Color",colorList(4),"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))));
 rEUR(5) = plot(nan,nan,'LineStyle', 'none',DisplayName='');
 rEUR(6) = plot(nan,nan,'LineStyle', 'none',DisplayName='');
-rEUR(7) = plot(nan,nan,'LineStyle', 'none',DisplayName='');
+% rEUR(7) = plot(nan,nan,'LineStyle', 'none',DisplayName='');
+
+%Asymptotic Rate
+semilogy(etaAsympdB,keyRatesAsymp,"--","Color","black","DisplayName", "Infinite Decoy")
 
 % %PS (All 0 key rates commented out)
 % rPS(1) = semilogy(etadB,keyRatesPSN11,"-.^","Color",colorList(7),"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(7))));
@@ -156,16 +178,20 @@ set(gcf,'position',[x0,y0,width,height])
 semilogy(etadB,keyRatesN6,"-^","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
 hold on
 semilogy(etadB,keyRatesN11,"-o","Color",cRenyi,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(7))))
+plot(nan,nan,'LineStyle', 'none',DisplayName='');
 
 
 % --- EUR rates (Method 2: Dashed Line, Cross Marker) ---
 semilogy(etadB,keyRatesEURN8,"--^","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(4))))
 semilogy(etadB,keyRatesEURN11,"--o","Color",cEUR,"DisplayName", sprintf("n = 10^{%.0f} (EUR)",log10(Nlist(7))))
-
+plot(nan,nan,'LineStyle', 'none',DisplayName='');
 
 % --- PS rates (Method 3: Dot-Dash Line, Triangle Marker) ---
 semilogy(etadB,keyRatesPSN9,"-.^","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(5))))
 semilogy(etadB,keyRatesPSN11,"-.o","Color",cPS,"DisplayName", sprintf("n = 10^{%.0f} (PS)",log10(Nlist(7))))
+
+%Asymptotic Rate
+semilogy(etaAsympdB,keyRatesAsymp,"--","Color","black","DisplayName", "Infinite Decoy")
 
 % Formatting
 lgd = legend('NumColumns',3);
@@ -207,7 +233,7 @@ hold off
 
 f2=gca;
 filestr2 = "Renyi_DecoyBB84_optimal_mu.pdf";
-exportgraphics(f2,filestr2,'ContentType','vector')
+% exportgraphics(f2,filestr2,'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function rates = parseKeyRates(data,numElmts)
@@ -224,4 +250,44 @@ function optInt = parseOptInt(data,numElmts)
     optInt = zeros(1,numElmts);
     numList = numel(list);
     optInt(1:numList) = list;
+end
+
+function R = asymptotic_decoy_BB84(px, mu, eta, theta_bloch, f_EC)
+    % ASYMPTOTIC_DECOY_BB84 Calculates secret key rate with infinite decoys
+    % and a pure optical misalignment angle (no Y0 assumptions).
+    %
+    % Inputs:
+    %   pz      - Basis choices (px + pz = 1)
+    %   mu      - Signal state mean photon number
+    %   eta     - Overall channel + detector transmittance
+    %   theta   - Optical misalignment angle (in radians)
+    %   f_EC    - Error correction efficiency factor
+
+    % Binary entropy function (safe against 0 * log(0) and out-of-bounds)
+    h = @(x) -x.*log2(max(x, 1e-15)) - (1-x).*log2(max(1-x, 1e-15));
+    
+    % Optical misalignment error probability
+    e_opt = sin(theta_bloch / 2)^2;
+    
+    % --- GAINS (Yields * Poisson weights) ---
+    % Total detection probability Q_mu
+    Q_mu = 1 - exp(-eta .* mu);
+    
+    % Single-photon detection probability Q_1 (resolved exactly via infinite decoys)
+    Q_1  = (mu .* exp(-mu)) .* eta;
+    
+    % --- ERROR RATES ---
+    % Under pure misalignment without background noise assumptions,
+    % both overall QBER and single-photon error rate equal sin^2(theta)
+    E_mu = e_opt;
+    e1   = e_opt;
+    
+    % Sifting factor (probability both Alice and Bob chose the same basis)
+    pz = 1-px;
+    sifting_factor = (pz^2 + px^2);
+    
+    % --- KEY RATE CALCULATION ---
+    % Asymptotic decoy-state formula per pulse:
+    % R = sifting * [ Q1 * (1 - h(e1)) - f_EC * Q_mu * h(E_mu) ]
+    R = sifting_factor .* ( Q_1 .* (1 - h(e1)) - f_EC .* Q_mu .* h(E_mu) );
 end
