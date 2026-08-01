@@ -89,9 +89,9 @@ resultsN11 = matN11.results;
 tempMusigopt = arrayfun(@(x) x.currentParams.GROUP_decoys_1, resultsN11);
 tempPtest = arrayfun(@(x) x.currentParams.probTest, resultsN11);
 
-popt_musig = polyfit(tempetaAsymp,tempMusigopt(1:22),2);
+popt_musig = polyfit(tempetaAsymp,tempMusigopt(1:22),1);
 musigopt = polyval(popt_musig,etaAsymp);
-popt_pTest = polyfit(tempetaAsymp,tempPtest(1:22),2);
+popt_pTest = polyfit(tempetaAsymp,tempPtest(1:22),1);
 pTestopt = polyval(popt_pTest,etaAsymp);
 
 for index=1: length(etaAsymp)
@@ -159,8 +159,8 @@ hold off
 %save figure
 f1=gca;
 filestr1 = "ActiveDecoyBB84_2Decoy";
-% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
-% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -63,9 +63,9 @@ resultsN11 = matN11.results;
 tempMusigopt = arrayfun(@(x) x.currentParams.GROUP_decoys_1, resultsN11);
 tempPtest = arrayfun(@(x) x.currentParams.probTest, resultsN11);
 
-popt_musig = polyfit(tempetaAsymp,tempMusigopt(1:22),2);
+popt_musig = polyfit(tempetaAsymp,tempMusigopt(1:22),1);
 musigopt = polyval(popt_musig,etaAsymp);
-popt_pTest = polyfit(tempetaAsymp,tempPtest(1:22),2);
+popt_pTest = polyfit(tempetaAsymp,tempPtest(1:22),1);
 pTestopt = polyval(popt_pTest,etaAsymp);
 
 for index=1: length(etaAsymp)
