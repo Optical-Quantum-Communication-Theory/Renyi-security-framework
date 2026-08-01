@@ -159,8 +159,8 @@ hold off
 %save figure
 f1=gca;
 filestr1 = "ActiveDecoyBB84_2Decoy";
-exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
-exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
+% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
