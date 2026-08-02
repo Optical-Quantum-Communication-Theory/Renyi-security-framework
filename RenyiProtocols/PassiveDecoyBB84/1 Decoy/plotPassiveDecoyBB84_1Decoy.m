@@ -61,41 +61,69 @@ Nlist = 10.^([6,8,10]);
 colorList = ["#0072BD", "#D95319", "#77AC30"];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Asymptotic key rates
+
+results_eps0 = matN10_eps0.results;
+fEC      = results_eps0(1).currentParams.fEC;
+theta    = results_eps0(1).currentParams.misalignmentAngle;
+musig    = results_eps0(1).currentParams.GROUP_decoys_1;
+delta    = results_eps0(1).currentParams.GROUP_deltaDecoys_1;
+probtest = results_eps0(1).currentParams.probTest;
+
+pzA = 1 - probtest;
+pzB = 1 - probtest;
+pxB = probtest;
+
+% 1D array instead of 2D matrix since there is only 1 epsilonInt
+keyRatesAsymp = zeros(length(etaAsymp), 1);
+
+for index = 1:length(etaAsymp)
+    keyRatesAsymp(index) = asymptotic_decoy_BB84_Passive(pzA, pzB, pxB, musig, etaAsymp(index), theta, fEC);
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Key rate
 %Options for plots 
 [x0,y0,width,height] = deal(50,100,600,500);
-
-
 figure
 set(gcf,'position',[x0,y0,width,height])
 
-%epsilonInt = 0, i.e. perfect
-semilogy(etadB,keyRatesN10_eps0,":p","Color","black",'LineWidth',1,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
+darkGreen = "#77AC30";
 
+% epsilonInt = 0, i.e. perfect
+semilogy(etadB,keyRatesN10_eps0,":p","Color","black","Markersize",10,"HandleVisibility","off")
 hold on
-semilogy(etadB,keyRatesN8_eps0,":s","Color","black",'LineWidth',1,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_eps0,":o","Color","black",'LineWidth',1,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN8_eps0,"--s","Color","black","HandleVisibility","off")
+semilogy(etadB,keyRatesN6_eps0,"-.o","Color","black","HandleVisibility","off")
 
 %epsilonInt = 10%
-semilogy(etadB,keyRatesN10_eps10,"-p","Color",colorList(2),"Markersize",10, "DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8_eps10,"--s","Color",colorList(2),"Markersize",8, "DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_eps10,"-.o","Color",colorList(2),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10_eps10,":p","Color",colorList(1),"Markersize",10,"HandleVisibility","off")
+semilogy(etadB,keyRatesN8_eps10,"--s","Color",colorList(1),"Markersize",8,"HandleVisibility","off")
+semilogy(etadB,keyRatesN6_eps10,"-.o","Color",colorList(1),"HandleVisibility","off")
 
 %epsilonInt = 25%
-semilogy(etadB,keyRatesN10_eps25,"-p","Color",colorList(3),"Markersize",10,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(3))))
-semilogy(etadB,keyRatesN8_eps25,"--s","Color",colorList(3),"Markersize",8,"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(2))))
-semilogy(etadB,keyRatesN6_eps25,"-.o","Color",colorList(3),"DisplayName", sprintf("n = 10^{%.0f}",log10(Nlist(1))))
+semilogy(etadB,keyRatesN10_eps25,":p","Color",colorList(2),"Markersize",10,"HandleVisibility","off")
+semilogy(etadB,keyRatesN8_eps25,"--s","Color",colorList(2),"Markersize",8,"HandleVisibility","off")
+semilogy(etadB,keyRatesN6_eps25,"-.o","Color",colorList(2),"HandleVisibility","off")
+semilogy(etaAsympdB,keyRatesAsymp,"--","Color",darkGreen,"LineWidth",1.5,"HandleVisibility","off")
 
-lgd = legend('NumColumns',4);
+h_n10 = plot(NaN,NaN,":p","Color","black","Markersize",8,"DisplayName",sprintf("n = 10^{%.0f}",log10(Nlist(3))));
+h_n8  = plot(NaN,NaN,"--s","Color","black","Markersize",8,"DisplayName",sprintf("n = 10^{%.0f}",log10(Nlist(2))));
+h_n6  = plot(NaN,NaN,"-.o","Color","black","Markersize",8,"DisplayName",sprintf("n = 10^{%.0f}",log10(Nlist(1))));
+h_inf = plot(NaN,NaN,"--","Color",darkGreen,"LineWidth",1.5,"DisplayName","Infinite Decoy");
+
+h_e0  = plot(NaN,NaN,"-","Color","black",      "LineWidth",2,"DisplayName","\epsilon_{int} = 0");
+h_e10 = plot(NaN,NaN,"-","Color",colorList(1), "LineWidth",2,"DisplayName","\epsilon_{int} = 10%");
+h_e25 = plot(NaN,NaN,"-","Color",colorList(2), "LineWidth",2,"DisplayName","\epsilon_{int} = 25%");
+
+lgd = legend([h_n10, h_n8, h_n6, h_inf, h_e0, h_e10, h_e25], 'NumColumns', 2);
 lgd.FontSize = 10;
 lgd.Location = 'northeast';
-xlabel('transmittance in dB',FontSize=14)
-ylabel('Secret key rate',FontSize=14)
-ylim([1*1e-6 5])
+lgd.Box = 'on';
 
-titles = {'\epsilon_{int} = 0','\epsilon_{int} = 10%', '\epsilon_{int} = 25%'};
-titles = sprintf('%-30s', titles{:});
-lgd.Title.String = titles;
+xlabel('Loss in dB',FontSize=14)
+ylabel('Secret Key Rate',FontSize=14)
+ylim([5*1e-6 0.5])
 hold off
 
 %save figure
@@ -141,4 +169,43 @@ function [rates,optValsTable] = parseKeyRatesAndOptVals(data,numElmts,optValName
 
     %assign header
     optValsTable.Properties.VariableNames(1:numel(optValNames)) = optValNames;
+end
+
+function R = asymptotic_decoy_BB84_Passive(pzA, pzB, pxB, mu, eta, theta, f_EC)
+    % 1. Convert Bloch sphere misalignment angle to intrinsic error probability
+    e_mis = sin(theta/2)^2;
+
+    % Light intensity arriving at Bob's passive arms
+    mu_z = eta .* pzB .* mu;
+    mu_x = eta .* pxB .* mu;
+
+    % 2. Strict Single-Click Probabilities in Z
+    % Click in correct detector AND no click in wrong detector
+    P_correct_only = exp(-mu_z .* e_mis) - exp(-mu_z);
+
+    % Click in wrong detector AND no click in correct detector
+    P_wrong_only = exp(-mu_z .* (1 - e_mis)) - exp(-mu_z);
+
+    % Total strict single-click yield in Z (must also have NO clicks in X)
+    P_no_X = exp(-mu_x);
+    Q_mu_Z = (P_correct_only + P_wrong_only) .* P_no_X;
+
+    % 3. QBER for the strict single-click Z events
+    ez = P_wrong_only ./ (P_correct_only + P_wrong_only);
+
+    % Single-photon phase error remains purely optical misalignment
+    ex = e_mis; 
+
+    % Safe binary entropy function
+    h2 = @(x) -max(x, eps).*log2(max(x, eps)) - max(1-x, eps).*log2(max(1-x, eps));
+
+    % 4. Single-photon detection probability per pulse
+    % Single photons inherently only cause single clicks
+    Q_1_Z = (mu .* exp(-mu)) .* (eta .* pzB);
+
+    % 5. Asymptotic decoy-state BB84 secret key rate per pulse
+    R = pzA .* ( Q_1_Z .* (1 - h2(ex)) - f_EC .* Q_mu_Z .* h2(ez) );
+
+    % Ensure rate doesn't drop below zero
+    R = max(R, 0);
 end
