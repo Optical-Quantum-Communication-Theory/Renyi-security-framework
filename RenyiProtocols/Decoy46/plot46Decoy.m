@@ -64,6 +64,7 @@ Nlist = 10.^([6,8,10,12,14]);
 
 %Color list
 colorList = ["#0072BD", "#D95319", "#77AC30"];
+darkGreen = "#77AC30";
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Asymptotic key rates
@@ -141,8 +142,8 @@ hold off
 %save figure
 f1=gca;
 filestr1 = "Decoy46";
-% exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
-% exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".pdf",'ContentType','vector')
+exportgraphics(f1,filestr1 + ".eps",'ContentType','vector')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [rates,optValsTable] = parseKeyRatesAndOptVals(data,numElmts,optValNames)
